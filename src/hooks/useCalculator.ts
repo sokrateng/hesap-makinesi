@@ -84,12 +84,28 @@ export function useCalculator() {
     doCalculate(expressionRef.current, angleMode, options?.speak ?? false)
   }, [angleMode, doCalculate, clearAutoCalcTimer])
 
+  const angleModeRef = useRef(angleMode)
+  useEffect(() => {
+    angleModeRef.current = angleMode
+  }, [angleMode])
+
   const startAutoCalcTimer = useCallback(() => {
     clearAutoCalcTimer()
     autoCalcTimer.current = setTimeout(() => {
-      doCalculate(expressionRef.current, angleMode, false)
+      const expr = expressionRef.current
+      if (!expr.trim()) return
+      const { result: calcResult, error: calcError } = evaluate(expr, angleModeRef.current)
+      if (calcError || calcResult === null) return
+      setResult(calcResult)
+      setError(null)
+      const entry: HistoryEntry = { expression: expr, result: calcResult, timestamp: Date.now() }
+      setHistory(prev => {
+        const updated = [entry, ...prev].slice(0, MAX_HISTORY)
+        saveHistory(updated)
+        return updated
+      })
     }, AUTO_CALC_DELAY)
-  }, [angleMode, doCalculate, clearAutoCalcTimer])
+  }, [clearAutoCalcTimer])
 
   const append = useCallback((value: string) => {
     setExpression(prev => prev + value)
@@ -132,13 +148,21 @@ export function useCalculator() {
     startAutoCalcTimer()
   }, [startAutoCalcTimer])
 
+  const appendAndCalculate = useCallback((value: string, options?: CalculateOptions) => {
+    clearAutoCalcTimer()
+    const newExpr = expressionRef.current + value
+    setExpression(newExpr)
+    setError(null)
+    doCalculate(newExpr, angleMode, options?.speak ?? false)
+  }, [angleMode, doCalculate, clearAutoCalcTimer])
+
   useEffect(() => {
     return () => clearAutoCalcTimer()
   }, [clearAutoCalcTimer])
 
   return {
     expression, result, error, history, angleMode,
-    append, clear, deleteLast, calculate, loadFromHistory,
+    append, clear, deleteLast, calculate, appendAndCalculate, loadFromHistory,
     toggleAngleMode, applyPercent, applyNegate,
   }
 }
