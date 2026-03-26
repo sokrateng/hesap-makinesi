@@ -89,6 +89,45 @@ body {
   letter-spacing: 0.5px;
 }
 
+.mic-button {
+  background: var(--bg-angle);
+  color: var(--text-angle);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: filter 150ms, background-color 300ms, transform 150ms;
+  line-height: 1;
+}
+
+.mic-button:hover {
+  filter: brightness(1.2);
+}
+
+.mic-button.listening {
+  background: #FF453A;
+  color: #FFFFFF;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+.mic-status {
+  background: var(--bg-display);
+  color: var(--text-expression);
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+  animation: fadeIn 200ms;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
