@@ -1,10 +1,10 @@
-import { useMemo, useCallback, useEffect, useRef } from 'react'
+import { useMemo, useCallback, useRef, useEffect } from 'react'
 import { useCalculator } from './hooks/useCalculator'
 import { useKeyboard } from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
 import { useSpeechRecognition } from './hooks/useSpeechRecognition'
 import { speechToMath } from './utils/speechToMath'
-import { speakResult } from './utils/speak'
+import { speakResult } from './utils/speakResult'
 import { Display } from './components/Display'
 import { ButtonGrid } from './components/ButtonGrid'
 import { History } from './components/History'
@@ -16,47 +16,42 @@ function App() {
   const calc = useCalculator()
   const theme = useTheme()
   const speechTriggeredRef = useRef(false)
-  const autoCalcTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const prevResultRef = useRef('')
 
-  const doSpeechCalculate = useCallback(() => {
-    speechTriggeredRef.current = true
-    calc.calculate()
-  }, [calc.calculate])
+  useEffect(() => {
+    if (speechTriggeredRef.current && calc.result && calc.result !== prevResultRef.current) {
+      speakResult(calc.result)
+      speechTriggeredRef.current = false
+    }
+    prevResultRef.current = calc.result
+  }, [calc.result])
+
+  useEffect(() => {
+    if (speechTriggeredRef.current && calc.error) {
+      speakResult(calc.error)
+      speechTriggeredRef.current = false
+    }
+  }, [calc.error])
 
   const handleSpeechResult = useCallback((transcript: string) => {
-    if (autoCalcTimerRef.current) {
-      clearTimeout(autoCalcTimerRef.current)
-      autoCalcTimerRef.current = null
-    }
-
     const result = speechToMath(transcript)
 
     if (result.type === 'command') {
       if (result.value === 'clear') calc.clear()
-      else if (result.value === 'equals') doSpeechCalculate()
+      else if (result.value === 'equals') {
+        speechTriggeredRef.current = true
+        calc.calculate()
+      }
     } else {
-      calc.append(result.value)
-
-      if (result.autoCalculate) {
-        setTimeout(doSpeechCalculate, 100)
+      if (result.value.endsWith('=')) {
+        calc.append(result.value.slice(0, -1))
+        speechTriggeredRef.current = true
+        setTimeout(() => calc.calculate(), 50)
       } else {
-        autoCalcTimerRef.current = setTimeout(doSpeechCalculate, 1500)
+        calc.append(result.value)
       }
     }
-  }, [calc.append, calc.clear, doSpeechCalculate])
-
-  useEffect(() => {
-    if (speechTriggeredRef.current && calc.result && !calc.error) {
-      speechTriggeredRef.current = false
-      speakResult(calc.expression, calc.result)
-    }
-  }, [calc.result, calc.error, calc.expression])
-
-  useEffect(() => {
-    return () => {
-      if (autoCalcTimerRef.current) clearTimeout(autoCalcTimerRef.current)
-    }
-  }, [])
+  }, [calc.append, calc.clear, calc.calculate])
 
   const speech = useSpeechRecognition(handleSpeechResult)
 

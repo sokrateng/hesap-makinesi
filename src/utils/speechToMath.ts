@@ -57,51 +57,25 @@ const COMMAND_MAP: Record<string, string> = {
   'sil': 'clear',
 }
 
-const TAIL_PHRASES = [
-  'kaç eder',
-  'kaç yapar',
-  'kaçtır',
-  'kaçtir',
-  'kaç',
-  'sonucu nedir',
-  'sonucu ne',
-  'sonucu kaç',
-  'ne eder',
-  'ne yapar',
-  'nedir',
-  'eder',
-  'yapar',
-]
-
 export interface SpeechResult {
   type: 'expression' | 'command'
   value: string
-  autoCalculate: boolean
 }
 
 export function speechToMath(text: string): SpeechResult {
-  let normalized = text.trim().toLowerCase()
+  const normalized = text.trim().toLowerCase()
 
   for (const [keyword, command] of Object.entries(COMMAND_MAP)) {
     if (normalized === keyword || normalized.endsWith(keyword)) {
       const before = normalized.slice(0, normalized.length - keyword.length).trim()
       if (before) {
-        return { type: 'expression', value: convertWords(before), autoCalculate: true }
+        return { type: 'expression', value: convertWords(before) + (command === 'equals' ? '=' : '') }
       }
-      return { type: 'command', value: command, autoCalculate: false }
+      return { type: 'command', value: command }
     }
   }
 
-  for (const phrase of TAIL_PHRASES) {
-    if (normalized.endsWith(phrase)) {
-      const before = normalized.slice(0, normalized.length - phrase.length).trim()
-      if (before) {
-        return { type: 'expression', value: convertWords(before), autoCalculate: true }
-      }
-    }
-  }
-
-  return { type: 'expression', value: convertWords(normalized), autoCalculate: false }
+  return { type: 'expression', value: convertWords(normalized) }
 }
 
 function convertWords(text: string): string {
