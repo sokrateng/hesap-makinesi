@@ -81,3 +81,29 @@ describe('evaluate', () => {
     expect(parseFloat(result.result!)).toBeCloseTo(Math.sin(Math.PI / 180), 5)
   })
 })
+
+describe('normalize — auto-close parentheses', () => {
+  it('closes single missing parenthesis', () => {
+    expect(normalize('√(16')).toBe('sqrt(16)')
+  })
+
+  it('closes multiple missing parentheses', () => {
+    expect(normalize('sin(cos(90')).toBe('sin(cos(90))')
+  })
+
+  it('does not add extra when balanced', () => {
+    expect(normalize('√(16)')).toBe('sqrt(16)')
+  })
+
+  it('auto-closes and evaluates sqrt(16) correctly', () => {
+    const result = evaluate('√(16')
+    expect(result.result).toBe('4')
+    expect(result.error).toBeNull()
+  })
+
+  it('auto-closes and evaluates sin(90) correctly', () => {
+    const result = evaluate('sin(90', 'deg')
+    expect(result.result).toBe('1')
+    expect(result.error).toBeNull()
+  })
+})
