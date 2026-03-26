@@ -5,11 +5,19 @@ const math: MathJsStatic = create(all, {})
 export type AngleMode = 'deg' | 'rad'
 
 export function normalize(expression: string): string {
-  return expression
+  let expr = expression
     .replace(/×/g, '*')
     .replace(/÷/g, '/')
     .replace(/√\(/g, 'sqrt(')
     .replace(/π/g, 'pi')
+
+  const open = (expr.match(/\(/g) || []).length
+  const close = (expr.match(/\)/g) || []).length
+  if (open > close) {
+    expr += ')'.repeat(open - close)
+  }
+
+  return expr
 }
 
 function toRadians(expr: string): string {

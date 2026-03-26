@@ -21,6 +21,18 @@ describe('normalize', () => {
   it('handles combined symbols', () => {
     expect(normalize('√(16) × π ÷ 2')).toBe('sqrt(16) * pi / 2')
   })
+
+  it('auto-closes unclosed parentheses', () => {
+    expect(normalize('√(16')).toBe('sqrt(16)')
+  })
+
+  it('auto-closes multiple unclosed parentheses', () => {
+    expect(normalize('sin(cos(45')).toBe('sin(cos(45))')
+  })
+
+  it('does not add extra parens when balanced', () => {
+    expect(normalize('sin(90)')).toBe('sin(90)')
+  })
 })
 
 describe('evaluate', () => {
@@ -79,5 +91,13 @@ describe('evaluate', () => {
     const result = evaluate('sin(sin(90))', 'deg')
     expect(result.error).toBeNull()
     expect(parseFloat(result.result!)).toBeCloseTo(Math.sin(Math.PI / 180), 5)
+  })
+
+  it('auto-closes parens and evaluates √(16', () => {
+    expect(evaluate('√(16')).toEqual({ result: '4', error: null })
+  })
+
+  it('auto-closes parens and evaluates sin(90', () => {
+    expect(evaluate('sin(90', 'deg')).toEqual({ result: '1', error: null })
   })
 })
