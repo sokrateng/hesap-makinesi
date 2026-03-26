@@ -80,4 +80,16 @@ describe('evaluate', () => {
     expect(result.error).toBeNull()
     expect(parseFloat(result.result!)).toBeCloseTo(Math.sin(Math.PI / 180), 5)
   })
+
+  it('auto-closes unclosed parentheses', () => {
+    expect(evaluate('sin(90', 'deg')).toEqual({ result: '1', error: null })
+  })
+
+  it('auto-closes multiple unclosed parentheses', () => {
+    expect(evaluate('√(sin(90', 'deg')).toEqual({ result: '1', error: null })
+  })
+
+  it('does not alter already balanced parentheses', () => {
+    expect(evaluate('(2 + 3)')).toEqual({ result: '5', error: null })
+  })
 })

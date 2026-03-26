@@ -22,12 +22,22 @@ function toRadians(expr: string): string {
   return result
 }
 
+function autoCloseParens(expr: string): string {
+  let open = 0
+  for (const ch of expr) {
+    if (ch === '(') open++
+    else if (ch === ')') open--
+  }
+  return open > 0 ? expr + ')'.repeat(open) : expr
+}
+
 export function evaluate(
   expression: string,
   angleMode: AngleMode = 'deg'
 ): { result: string | null; error: string | null } {
   try {
     let normalized = normalize(expression)
+    normalized = autoCloseParens(normalized)
 
     if (angleMode === 'deg') {
       normalized = toRadians(normalized)
