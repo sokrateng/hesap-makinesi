@@ -12,15 +12,13 @@ import { ThemeToggle } from './components/ThemeToggle'
 import { MicButton } from './components/MicButton'
 import './App.css'
 
-const AUTO_CALC_DELAY = 1500
-
 function App() {
   const calc = useCalculator()
   const theme = useTheme()
   const speechTriggeredRef = useRef(false)
   const autoCalcTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const doCalculateWithSpeech = useCallback(() => {
+  const doSpeechCalculate = useCallback(() => {
     speechTriggeredRef.current = true
     calc.calculate()
   }, [calc.calculate])
@@ -35,21 +33,17 @@ function App() {
 
     if (result.type === 'command') {
       if (result.value === 'clear') calc.clear()
-      else if (result.value === 'equals') doCalculateWithSpeech()
-    } else if (result.type === 'expression_auto') {
-      calc.append(result.value)
-      autoCalcTimerRef.current = setTimeout(doCalculateWithSpeech, 50)
+      else if (result.value === 'equals') doSpeechCalculate()
     } else {
       calc.append(result.value)
-      autoCalcTimerRef.current = setTimeout(doCalculateWithSpeech, AUTO_CALC_DELAY)
-    }
-  }, [calc.append, calc.clear, doCalculateWithSpeech])
 
-  useEffect(() => {
-    return () => {
-      if (autoCalcTimerRef.current) clearTimeout(autoCalcTimerRef.current)
+      if (result.autoCalculate) {
+        setTimeout(doSpeechCalculate, 100)
+      } else {
+        autoCalcTimerRef.current = setTimeout(doSpeechCalculate, 1500)
+      }
     }
-  }, [])
+  }, [calc.append, calc.clear, doSpeechCalculate])
 
   useEffect(() => {
     if (speechTriggeredRef.current && calc.result && !calc.error) {
@@ -57,6 +51,12 @@ function App() {
       speakResult(calc.expression, calc.result)
     }
   }, [calc.result, calc.error, calc.expression])
+
+  useEffect(() => {
+    return () => {
+      if (autoCalcTimerRef.current) clearTimeout(autoCalcTimerRef.current)
+    }
+  }, [])
 
   const speech = useSpeechRecognition(handleSpeechResult)
 
