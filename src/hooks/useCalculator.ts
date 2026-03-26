@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { evaluate, type AngleMode } from '../utils/parser'
+import { speakResult } from '../utils/speakResult'
 
 interface HistoryEntry {
   expression: string
@@ -57,6 +58,7 @@ export function useCalculator() {
 
     setResult(calcResult!)
     setError(null)
+    speakResult(expression, calcResult!)
 
     const entry: HistoryEntry = {
       expression,

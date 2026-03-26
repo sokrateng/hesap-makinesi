@@ -1,35 +1,92 @@
-[data-theme="dark"] {
-  --bg-page: #000000;
+/* İlkokul: renkli, eğlenceli, büyük butonlar */
+[data-theme="ilkokul"] {
+  --bg-primary: #FFF8E7;
+  --bg-container: #FFFFFF;
+  --bg-display: #FFF3CD;
+  --bg-number: #4FC3F7;
+  --bg-operator: #FF8A65;
+  --bg-scientific: #AED581;
+  --bg-action: #EF5350;
+  --bg-equals: #FFD54F;
+  --bg-history: #FFF9C4;
+  --bg-angle: #CE93D8;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-button: #FFFFFF;
+  --text-equals: #333333;
+  --text-expression: #888888;
+  --text-result: #333333;
+  --text-error: #D32F2F;
+  --text-angle: #FFFFFF;
+  --text-history-label: #999999;
+  --text-history-expr: #888888;
+  --text-history-result: #333333;
+  --bg-history-hover: #FFF3CD;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --btn-radius: 16px;
+  --btn-font-size: 24px;
+  --btn-sci-font-size: 16px;
+  --font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+}
+
+/* Lise: temiz, modern, dengeli */
+[data-theme="lise"] {
+  --bg-primary: #F0F4F8;
+  --bg-container: #FFFFFF;
+  --bg-display: #E8EDF2;
+  --bg-number: #5C6BC0;
+  --bg-operator: #7E57C2;
+  --bg-scientific: #42A5F5;
+  --bg-action: #EF5350;
+  --bg-equals: #26A69A;
+  --bg-history: #ECEFF1;
+  --bg-angle: #7E57C2;
+  --text-primary: #263238;
+  --text-secondary: #546E7A;
+  --text-button: #FFFFFF;
+  --text-equals: #FFFFFF;
+  --text-expression: #78909C;
+  --text-result: #263238;
+  --text-error: #D32F2F;
+  --text-angle: #FFFFFF;
+  --text-history-label: #90A4AE;
+  --text-history-expr: #78909C;
+  --text-history-result: #263238;
+  --bg-history-hover: #CFD8DC;
+  --shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  --btn-radius: 12px;
+  --btn-font-size: 20px;
+  --btn-sci-font-size: 14px;
+  --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+/* Üniversite: koyu, profesyonel, kompakt */
+[data-theme="universite"] {
+  --bg-primary: #000000;
   --bg-container: #1C1C1E;
+  --bg-display: #1C1C1E;
   --bg-number: #2C2C2E;
   --bg-operator: #3A3A3C;
   --bg-scientific: #2C2C3E;
-  --bg-display: #1C1C1E;
+  --bg-action: #FF453A;
+  --bg-equals: #FF9F0A;
   --bg-history: #2C2C2E;
-  --bg-history-hover: #3A3A3C;
+  --bg-angle: #2C2C3E;
   --text-primary: #FFFFFF;
-  --text-secondary: rgba(235, 235, 245, 0.5);
-  --color-equals: #FF9F0A;
-  --color-action: #FF453A;
-  --color-error: #FF453A;
-  --color-accent: #FF9F0A;
-  --shadow: rgba(0, 0, 0, 0.5);
-}
-
-[data-theme="light"] {
-  --bg-page: #F2F2F7;
-  --bg-container: #FFFFFF;
-  --bg-number: #E5E5EA;
-  --bg-operator: #D1D1D6;
-  --bg-scientific: #E5E5F0;
-  --bg-display: #FFFFFF;
-  --bg-history: #F2F2F7;
-  --bg-history-hover: #E5E5EA;
-  --text-primary: #1C1C1E;
-  --text-secondary: rgba(60, 60, 67, 0.6);
-  --color-equals: #FF9F0A;
-  --color-action: #FF3B30;
-  --color-error: #FF3B30;
-  --color-accent: #FF9F0A;
-  --shadow: rgba(0, 0, 0, 0.1);
+  --text-secondary: #EBEBF580;
+  --text-button: #FFFFFF;
+  --text-equals: #FFFFFF;
+  --text-expression: #EBEBF580;
+  --text-result: #FFFFFF;
+  --text-error: #FF453A;
+  --text-angle: #FF9F0A;
+  --text-history-label: #EBEBF580;
+  --text-history-expr: #EBEBF580;
+  --text-history-result: #FFFFFF;
+  --bg-history-hover: #3A3A3C;
+  --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  --btn-radius: 12px;
+  --btn-font-size: 20px;
+  --btn-sci-font-size: 14px;
+  --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }

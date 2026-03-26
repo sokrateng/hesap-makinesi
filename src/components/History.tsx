@@ -21,10 +21,11 @@ export function History({ entries, onLoad }: HistoryProps) {
         marginTop: '12px',
         maxHeight: '200px',
         overflowY: 'auto',
+        transition: 'background-color 300ms',
       }}
     >
-      <div style={{ color: 'var(--text-secondary)', fontSize: '12px', marginBottom: '8px' }}>
-        Geçmiş
+      <div style={{ color: 'var(--text-history-label)', fontSize: '12px', marginBottom: '8px' }}>
+        Gecmis
       </div>
       {entries.map((entry, i) => (
         <div
@@ -40,8 +41,8 @@ export function History({ entries, onLoad }: HistoryProps) {
           onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'var(--bg-history-hover)')}
           onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
         >
-          <div style={{ color: 'var(--text-secondary)', fontSize: '13px' }}>{entry.expression}</div>
-          <div style={{ color: 'var(--text-primary)', fontSize: '16px' }}>= {entry.result}</div>
+          <div style={{ color: 'var(--text-history-expr)', fontSize: '13px' }}>{entry.expression}</div>
+          <div style={{ color: 'var(--text-history-result)', fontSize: '16px' }}>= {entry.result}</div>
         </div>
       ))}
     </div>

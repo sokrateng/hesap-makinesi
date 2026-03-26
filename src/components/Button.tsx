@@ -9,29 +9,31 @@ interface ButtonProps {
   wide?: boolean
 }
 
-const VARIANT_CSS_VARS: Record<ButtonVariant, string> = {
+const VARIANT_CSS_VAR: Record<ButtonVariant, string> = {
   number: 'var(--bg-number)',
   operator: 'var(--bg-operator)',
   scientific: 'var(--bg-scientific)',
-  action: 'var(--color-action)',
-  equals: 'var(--color-equals)',
+  action: 'var(--bg-action)',
+  equals: 'var(--bg-equals)',
 }
 
 export function Button({ children, onClick, variant = 'number', wide = false }: ButtonProps) {
+  const isEquals = variant === 'equals'
+
   return (
     <button
       onClick={onClick}
       style={{
-        backgroundColor: VARIANT_CSS_VARS[variant],
-        color: variant === 'equals' || variant === 'action' ? '#FFFFFF' : 'var(--text-primary)',
+        backgroundColor: VARIANT_CSS_VAR[variant],
+        color: isEquals ? 'var(--text-equals)' : 'var(--text-button)',
         border: 'none',
-        borderRadius: '12px',
-        fontSize: variant === 'scientific' ? '14px' : '20px',
+        borderRadius: 'var(--btn-radius)',
+        fontSize: variant === 'scientific' ? 'var(--btn-sci-font-size)' : 'var(--btn-font-size)',
         fontWeight: 500,
         cursor: 'pointer',
         padding: '16px',
         gridColumn: wide ? 'span 2' : 'span 1',
-        transition: 'filter 150ms, transform 100ms',
+        transition: 'filter 150ms, transform 100ms, background-color 300ms',
         userSelect: 'none',
       }}
       onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(1.2)')}

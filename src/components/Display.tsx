@@ -17,11 +17,12 @@ export function Display({ expression, result, error }: DisplayProps) {
         flexDirection: 'column',
         justifyContent: 'flex-end',
         alignItems: 'flex-end',
+        transition: 'background-color 300ms',
       }}
     >
       <div
         style={{
-          color: 'var(--text-secondary)',
+          color: 'var(--text-expression)',
           fontSize: '18px',
           wordBreak: 'break-all',
           textAlign: 'right',
@@ -33,7 +34,7 @@ export function Display({ expression, result, error }: DisplayProps) {
       </div>
       <div
         style={{
-          color: error ? 'var(--color-error)' : 'var(--text-primary)',
+          color: error ? 'var(--text-error)' : 'var(--text-result)',
           fontSize: error ? '18px' : '36px',
           fontWeight: 700,
           textAlign: 'right',

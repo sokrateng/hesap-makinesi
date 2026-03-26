@@ -1,61 +1,44 @@
 import { useState, useEffect, useCallback } from 'react'
 
-export type ThemePreference = 'dark' | 'light' | 'system'
-type ResolvedTheme = 'dark' | 'light'
+export type Theme = 'ilkokul' | 'lise' | 'universite'
 
 const THEME_KEY = 'hesap-makinesi-theme'
+const THEMES: Theme[] = ['ilkokul', 'lise', 'universite']
 
-function getSystemTheme(): ResolvedTheme {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+export const THEME_LABELS: Record<Theme, string> = {
+  ilkokul: 'İlkokul',
+  lise: 'Lise',
+  universite: 'Üniversite',
 }
 
-function resolveTheme(preference: ThemePreference): ResolvedTheme {
-  return preference === 'system' ? getSystemTheme() : preference
+export const THEME_EMOJI: Record<Theme, string> = {
+  ilkokul: '🎨',
+  lise: '📐',
+  universite: '🔬',
 }
 
-function applyTheme(theme: ResolvedTheme) {
-  document.documentElement.dataset.theme = theme
-}
-
-function loadPreference(): ThemePreference {
+function loadTheme(): Theme {
   try {
-    const stored = localStorage.getItem(THEME_KEY)
-    if (stored === 'dark' || stored === 'light' || stored === 'system') return stored
+    const stored = localStorage.getItem(THEME_KEY) as Theme | null
+    if (stored && THEMES.includes(stored)) return stored
   } catch { /* ignore */ }
-  return 'dark'
+  return 'universite'
 }
 
 export function useTheme() {
-  const [preference, setPreference] = useState<ThemePreference>(loadPreference)
-  const [resolved, setResolved] = useState<ResolvedTheme>(() => resolveTheme(loadPreference()))
+  const [theme, setTheme] = useState<Theme>(loadTheme)
 
   useEffect(() => {
-    const theme = resolveTheme(preference)
-    setResolved(theme)
-    applyTheme(theme)
-    localStorage.setItem(THEME_KEY, preference)
-  }, [preference])
-
-  useEffect(() => {
-    if (preference !== 'system') return
-
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const handler = () => {
-      const theme = getSystemTheme()
-      setResolved(theme)
-      applyTheme(theme)
-    }
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [preference])
+    document.documentElement.setAttribute('data-theme', theme)
+    localStorage.setItem(THEME_KEY, theme)
+  }, [theme])
 
   const cycleTheme = useCallback(() => {
-    setPreference(prev => {
-      const order: ThemePreference[] = ['dark', 'light', 'system']
-      const idx = order.indexOf(prev)
-      return order[(idx + 1) % order.length]
+    setTheme(prev => {
+      const idx = THEMES.indexOf(prev)
+      return THEMES[(idx + 1) % THEMES.length]
     })
   }, [])
 
-  return { preference, resolved, cycleTheme }
+  return { theme, cycleTheme }
 }
