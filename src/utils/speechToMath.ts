@@ -1,4 +1,12 @@
 const MULTI_WORD_MAP: [string, string][] = [
+  ['on bir', '11'], ['on iki', '12'], ['on üç', '13'],
+  ['on dört', '14'], ['on beş', '15'], ['on altı', '16'],
+  ['on yedi', '17'], ['on sekiz', '18'], ['on dokuz', '19'],
+  ['on uc', '13'], ['on dort', '14'], ['on bes', '15'],
+  ['on alti', '16'],
+  ['ne eder', ''], ['ne yapar', ''], ['kaç eder', ''], ['kaç yapar', ''],
+  ['kaç eder', ''], ['kac eder', ''], ['kac yapar', ''],
+  ['sonucu nedir', ''], ['sonucu ne', ''],
   ['parantez aç', '('],
   ['parantez kapat', ')'],
   ['kare kök', '√('],
@@ -43,11 +51,33 @@ const SINGLE_WORD_MAP: Record<string, string> = {
   'sekiz': '8',
   'dokuz': '9',
   'on': '10',
+  'yirmi': '20',
+  'otuz': '30',
+  'kırk': '40',
+  'kirk': '40',
+  'elli': '50',
+  'altmış': '60',
+  'altmis': '60',
+  'yetmiş': '70',
+  'yetmis': '70',
+  'seksen': '80',
+  'doksan': '90',
   'yüz': '100',
   'yuz': '100',
   'bin': '1000',
   'x': '×',
 }
+
+const NOISE_WORDS = new Set([
+  'kaç', 'kac', 'kaçtır', 'kactir', 'kaçtir', 'kactır',
+  'eder', 'yapar', 'nedir', 'ne', 'dir', 'dır',
+  'sonucu', 'sonuç', 'sonuc',
+  'bul', 'söyle', 'soyle', 'de',
+  'lütfen', 'lutfen', 'acaba',
+  'bu', 'şu', 'su', 'o',
+  'işlemin', 'islemin', 'işlemi', 'islemi',
+  'hesabın', 'hesabin', 'hesabı', 'hesabi',
+])
 
 const COMMAND_MAP: Record<string, string> = {
   'eşittir': 'equals',
@@ -63,10 +93,10 @@ export interface SpeechResult {
 }
 
 export function speechToMath(text: string): SpeechResult {
-  const normalized = text.trim().toLowerCase()
+  let normalized = text.trim().toLowerCase()
 
   for (const [keyword, command] of Object.entries(COMMAND_MAP)) {
-    if (normalized === keyword || normalized.endsWith(keyword)) {
+    if (normalized === keyword || normalized.endsWith(' ' + keyword)) {
       const before = normalized.slice(0, normalized.length - keyword.length).trim()
       if (before) {
         return { type: 'expression', value: convertWords(before) + (command === 'equals' ? '=' : '') }
@@ -75,7 +105,8 @@ export function speechToMath(text: string): SpeechResult {
     }
   }
 
-  return { type: 'expression', value: convertWords(normalized) }
+  const converted = convertWords(normalized)
+  return { type: 'expression', value: converted }
 }
 
 function convertWords(text: string): string {
@@ -89,12 +120,15 @@ function convertWords(text: string): string {
   const converted: string[] = []
 
   for (const token of tokens) {
+    if (!token) continue
     if (/^\d+([.,]\d+)?$/.test(token)) {
       converted.push(token.replace(',', '.'))
     } else if (token in SINGLE_WORD_MAP) {
       converted.push(SINGLE_WORD_MAP[token])
     } else if (/^[+\-×÷^√π().*/%=]$/.test(token)) {
       converted.push(token)
+    } else if (NOISE_WORDS.has(token)) {
+      continue
     } else {
       converted.push(token)
     }

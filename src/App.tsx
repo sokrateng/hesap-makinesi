@@ -25,14 +25,10 @@ function App() {
         calc.calculate({ speak: true })
       }
     } else {
-      if (result.value.endsWith('=')) {
-        calc.append(result.value.slice(0, -1))
-        setTimeout(() => calc.calculate({ speak: true }), 50)
-      } else {
-        calc.append(result.value)
-      }
+      const expr = result.value.endsWith('=') ? result.value.slice(0, -1) : result.value
+      calc.appendAndCalculate(expr, { speak: true })
     }
-  }, [calc.append, calc.clear, calc.calculate])
+  }, [calc.clear, calc.calculate, calc.appendAndCalculate])
 
   const speech = useSpeechRecognition(handleSpeechResult)
 
@@ -67,6 +63,11 @@ function App() {
         {speech.interim && (
           <div className="mic-status">
             {speech.interim}...
+          </div>
+        )}
+        {speech.error && (
+          <div className="mic-status" style={{ color: 'var(--color-error, #FF453A)' }}>
+            {speech.error}
           </div>
         )}
         <Display

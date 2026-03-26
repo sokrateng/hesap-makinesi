@@ -18,8 +18,8 @@ describe('speechToMath', () => {
     expect(speechToMath('sinüs dokuz')).toEqual({ type: 'expression', value: 'sin(9' })
   })
 
-  it('converts karekök', () => {
-    expect(speechToMath('karekök on altı')).toEqual({ type: 'expression', value: '√(106' })
+  it('converts karekök on altı to √(16', () => {
+    expect(speechToMath('karekök on altı')).toEqual({ type: 'expression', value: '√(16' })
   })
 
   it('recognizes eşittir command', () => {
@@ -70,5 +70,37 @@ describe('speechToMath', () => {
 
   it('handles decimal numbers from speech', () => {
     expect(speechToMath('3,14 çarpı iki')).toEqual({ type: 'expression', value: '3.14×2' })
+  })
+
+  it('strips "kaç eder" from expression', () => {
+    expect(speechToMath('5 çarpı 5 kaç eder')).toEqual({ type: 'expression', value: '5×5' })
+  })
+
+  it('strips "ne eder" from expression', () => {
+    expect(speechToMath('beş artı üç ne eder')).toEqual({ type: 'expression', value: '5+3' })
+  })
+
+  it('strips "nedir" from expression', () => {
+    expect(speechToMath('on bölü iki nedir')).toEqual({ type: 'expression', value: '10÷2' })
+  })
+
+  it('strips "sonucu nedir" from expression', () => {
+    expect(speechToMath('üç çarpı yedi sonucu nedir')).toEqual({ type: 'expression', value: '3×7' })
+  })
+
+  it('strips "bul" from expression', () => {
+    expect(speechToMath('iki artı iki bul')).toEqual({ type: 'expression', value: '2+2' })
+  })
+
+  it('strips "kaçtır" from expression', () => {
+    expect(speechToMath('sekiz bölü dört kaçtır')).toEqual({ type: 'expression', value: '8÷4' })
+  })
+
+  it('strips multiple noise words', () => {
+    expect(speechToMath('bu işlemin sonucu kaç')).toEqual({ type: 'expression', value: '' })
+  })
+
+  it('handles "5*5 kaç eder" with numeric input', () => {
+    expect(speechToMath('5*5 kaç eder')).toEqual({ type: 'expression', value: '5*5' })
   })
 })
