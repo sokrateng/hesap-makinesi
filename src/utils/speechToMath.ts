@@ -49,30 +49,49 @@ const SINGLE_WORD_MAP: Record<string, string> = {
   'x': '×',
 }
 
-const COMMAND_MAP: Record<string, string> = {
-  'eşittir': 'equals',
-  'esittir': 'equals',
-  'hesapla': 'equals',
-  'temizle': 'clear',
-  'sil': 'clear',
-}
+const TAIL_TRIGGERS: RegExp[] = [
+  /\s*kaç\s*(eder|yapar|olur)?\s*\??\s*$/,
+  /\s*sonuc(u|ü)?\s*(nedir|ne|kaç)?\s*\??\s*$/,
+  /\s*ne\s*(eder|yapar|olur)\s*\??\s*$/,
+  /\s*eşittir\s*$/,
+  /\s*esittir\s*$/,
+  /\s*hesapla\s*$/,
+]
+
+const COMMAND_KEYWORDS = ['temizle', 'sil']
+
+const NOISE_WORDS = new Set([
+  'kaç', 'eder', 'yapar', 'olur', 'nedir', 'ne', 'sonucu', 'sonuç',
+  'bu', 'şu', 'o', 'de', 'da', 'mi', 'mı', 'mu', 'mü',
+  'ile', 've', 'bir', 'the', 'is', 'what',
+])
 
 export interface SpeechResult {
-  type: 'expression' | 'command'
+  type: 'expression' | 'command' | 'expression_auto'
   value: string
 }
 
 export function speechToMath(text: string): SpeechResult {
   const normalized = text.trim().toLowerCase()
 
-  for (const [keyword, command] of Object.entries(COMMAND_MAP)) {
+  for (const keyword of COMMAND_KEYWORDS) {
     if (normalized === keyword || normalized.endsWith(keyword)) {
-      const before = normalized.slice(0, normalized.length - keyword.length).trim()
-      if (before) {
-        return { type: 'expression', value: convertWords(before) + (command === 'equals' ? '=' : '') }
-      }
-      return { type: 'command', value: command }
+      return { type: 'command', value: 'clear' }
     }
+  }
+
+  for (const pattern of TAIL_TRIGGERS) {
+    if (pattern.test(normalized)) {
+      const cleaned = normalized.replace(pattern, '').trim()
+      if (cleaned) {
+        return { type: 'expression_auto', value: convertWords(cleaned) }
+      }
+      return { type: 'command', value: 'equals' }
+    }
+  }
+
+  if (normalized === 'eşittir' || normalized === 'esittir' || normalized === 'hesapla') {
+    return { type: 'command', value: 'equals' }
   }
 
   return { type: 'expression', value: convertWords(normalized) }
@@ -95,6 +114,8 @@ function convertWords(text: string): string {
       converted.push(SINGLE_WORD_MAP[token])
     } else if (/^[+\-×÷^√π().*/%=]$/.test(token)) {
       converted.push(token)
+    } else if (NOISE_WORDS.has(token)) {
+      // skip
     } else {
       converted.push(token)
     }
