@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { evaluate, type AngleMode } from '../utils/parser'
 import { speakResult } from '../utils/speakResult'
 
@@ -8,8 +8,13 @@ interface HistoryEntry {
   timestamp: number
 }
 
+export interface CalculateOptions {
+  speak?: boolean
+}
+
 const HISTORY_KEY = 'hesap-makinesi-history'
 const MAX_HISTORY = 20
+const AUTO_CALC_DELAY = 1500
 
 function loadHistory(): HistoryEntry[] {
   try {
@@ -30,26 +35,24 @@ export function useCalculator() {
   const [error, setError] = useState<string | null>(null)
   const [history, setHistory] = useState<HistoryEntry[]>(loadHistory)
   const [angleMode, setAngleMode] = useState<AngleMode>('deg')
+  const autoCalcTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const expressionRef = useRef(expression)
 
-  const append = useCallback((value: string) => {
-    setExpression(prev => prev + value)
-    setError(null)
+  useEffect(() => {
+    expressionRef.current = expression
+  }, [expression])
+
+  const clearAutoCalcTimer = useCallback(() => {
+    if (autoCalcTimer.current) {
+      clearTimeout(autoCalcTimer.current)
+      autoCalcTimer.current = null
+    }
   }, [])
 
-  const clear = useCallback(() => {
-    setExpression('')
-    setResult('')
-    setError(null)
-  }, [])
+  const doCalculate = useCallback((expr: string, mode: AngleMode, speak: boolean) => {
+    if (!expr.trim()) return
 
-  const deleteLast = useCallback(() => {
-    setExpression(prev => prev.slice(0, -1))
-  }, [])
-
-  const calculate = useCallback(() => {
-    if (!expression.trim()) return
-
-    const { result: calcResult, error: calcError } = evaluate(expression, angleMode)
+    const { result: calcResult, error: calcError } = evaluate(expr, mode)
 
     if (calcError) {
       setError(calcError)
@@ -58,10 +61,13 @@ export function useCalculator() {
 
     setResult(calcResult!)
     setError(null)
-    speakResult(expression, calcResult!)
+
+    if (speak) {
+      speakResult(expr, calcResult!)
+    }
 
     const entry: HistoryEntry = {
-      expression,
+      expression: expr,
       result: calcResult!,
       timestamp: Date.now(),
     }
@@ -71,15 +77,46 @@ export function useCalculator() {
       saveHistory(updated)
       return updated
     })
-  }, [expression, angleMode])
+  }, [])
+
+  const calculate = useCallback((options?: CalculateOptions) => {
+    clearAutoCalcTimer()
+    doCalculate(expressionRef.current, angleMode, options?.speak ?? false)
+  }, [angleMode, doCalculate, clearAutoCalcTimer])
+
+  const startAutoCalcTimer = useCallback(() => {
+    clearAutoCalcTimer()
+    autoCalcTimer.current = setTimeout(() => {
+      doCalculate(expressionRef.current, angleMode, false)
+    }, AUTO_CALC_DELAY)
+  }, [angleMode, doCalculate, clearAutoCalcTimer])
+
+  const append = useCallback((value: string) => {
+    setExpression(prev => prev + value)
+    setError(null)
+    startAutoCalcTimer()
+  }, [startAutoCalcTimer])
+
+  const clear = useCallback(() => {
+    clearAutoCalcTimer()
+    setExpression('')
+    setResult('')
+    setError(null)
+  }, [clearAutoCalcTimer])
+
+  const deleteLast = useCallback(() => {
+    setExpression(prev => prev.slice(0, -1))
+    startAutoCalcTimer()
+  }, [startAutoCalcTimer])
 
   const loadFromHistory = useCallback((index: number) => {
+    clearAutoCalcTimer()
     if (index >= 0 && index < history.length) {
       setExpression(history[index].expression)
       setResult('')
       setError(null)
     }
-  }, [history])
+  }, [history, clearAutoCalcTimer])
 
   const toggleAngleMode = useCallback(() => {
     setAngleMode(prev => (prev === 'deg' ? 'rad' : 'deg'))
@@ -87,11 +124,17 @@ export function useCalculator() {
 
   const applyPercent = useCallback(() => {
     setExpression(prev => `${prev} / 100`)
-  }, [])
+    startAutoCalcTimer()
+  }, [startAutoCalcTimer])
 
   const applyNegate = useCallback(() => {
     setExpression(prev => `-(${prev})`)
-  }, [])
+    startAutoCalcTimer()
+  }, [startAutoCalcTimer])
+
+  useEffect(() => {
+    return () => clearAutoCalcTimer()
+  }, [clearAutoCalcTimer])
 
   return {
     expression, result, error, history, angleMode,
