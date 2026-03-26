@@ -8,7 +8,7 @@ export function Display({ expression, result, error }: DisplayProps) {
   return (
     <div
       style={{
-        backgroundColor: '#1C1C1E',
+        backgroundColor: 'var(--bg-display)',
         padding: '20px 24px',
         borderRadius: '16px',
         marginBottom: '12px',
@@ -21,7 +21,7 @@ export function Display({ expression, result, error }: DisplayProps) {
     >
       <div
         style={{
-          color: '#EBEBF580',
+          color: 'var(--text-secondary)',
           fontSize: '18px',
           wordBreak: 'break-all',
           textAlign: 'right',
@@ -33,7 +33,7 @@ export function Display({ expression, result, error }: DisplayProps) {
       </div>
       <div
         style={{
-          color: error ? '#FF453A' : '#FFFFFF',
+          color: error ? 'var(--color-error)' : 'var(--text-primary)',
           fontSize: error ? '18px' : '36px',
           fontWeight: 700,
           textAlign: 'right',

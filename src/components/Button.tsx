@@ -9,12 +9,12 @@ interface ButtonProps {
   wide?: boolean
 }
 
-const VARIANT_COLORS: Record<ButtonVariant, string> = {
-  number: '#2C2C2E',
-  operator: '#3A3A3C',
-  scientific: '#2C2C3E',
-  action: '#FF453A',
-  equals: '#FF9F0A',
+const VARIANT_CSS_VARS: Record<ButtonVariant, string> = {
+  number: 'var(--bg-number)',
+  operator: 'var(--bg-operator)',
+  scientific: 'var(--bg-scientific)',
+  action: 'var(--color-action)',
+  equals: 'var(--color-equals)',
 }
 
 export function Button({ children, onClick, variant = 'number', wide = false }: ButtonProps) {
@@ -22,8 +22,8 @@ export function Button({ children, onClick, variant = 'number', wide = false }: 
     <button
       onClick={onClick}
       style={{
-        backgroundColor: VARIANT_COLORS[variant],
-        color: '#FFFFFF',
+        backgroundColor: VARIANT_CSS_VARS[variant],
+        color: variant === 'equals' || variant === 'action' ? '#FFFFFF' : 'var(--text-primary)',
         border: 'none',
         borderRadius: '12px',
         fontSize: variant === 'scientific' ? '14px' : '20px',
