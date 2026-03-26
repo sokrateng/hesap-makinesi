@@ -1,0 +1,49 @@
+interface HistoryEntry {
+  expression: string
+  result: string
+  timestamp: number
+}
+
+interface HistoryProps {
+  entries: HistoryEntry[]
+  onLoad: (index: number) => void
+}
+
+export function History({ entries, onLoad }: HistoryProps) {
+  if (entries.length === 0) return null
+
+  return (
+    <div
+      style={{
+        backgroundColor: '#2C2C2E',
+        borderRadius: '12px',
+        padding: '12px',
+        marginTop: '12px',
+        maxHeight: '200px',
+        overflowY: 'auto',
+      }}
+    >
+      <div style={{ color: '#EBEBF580', fontSize: '12px', marginBottom: '8px' }}>
+        Geçmiş
+      </div>
+      {entries.map((entry, i) => (
+        <div
+          key={entry.timestamp}
+          onClick={() => onLoad(i)}
+          style={{
+            padding: '8px',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            marginBottom: '4px',
+            transition: 'background 150ms',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.backgroundColor = '#3A3A3C')}
+          onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'transparent')}
+        >
+          <div style={{ color: '#EBEBF580', fontSize: '13px' }}>{entry.expression}</div>
+          <div style={{ color: '#FFFFFF', fontSize: '16px' }}>= {entry.result}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
