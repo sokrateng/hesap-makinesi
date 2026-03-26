@@ -16,7 +16,7 @@ export function speakResult(expression: string, result: string): void {
   window.speechSynthesis.speak(utterance)
 }
 
-function humanize(expression: string, result: string): string {
+export function humanize(expression: string, result: string): string {
   let spoken = expression
     .replace(/\*/g, ' çarpı ')
     .replace(/\//g, ' bölü ')

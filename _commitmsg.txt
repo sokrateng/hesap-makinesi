@@ -1,0 +1,1 @@
+ci: add GitHub Pages deployment with Actions workflow

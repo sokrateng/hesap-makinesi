@@ -29,6 +29,15 @@ declare global {
   }
 }
 
+const ERROR_MESSAGES: Record<string, string> = {
+  'not-allowed': 'Mikrofon izni verilmedi',
+  'audio-capture': 'Mikrofon bulunamadı',
+  'network': 'Ağ bağlantısı hatası',
+  'no-speech': 'Ses algılanamadı',
+  'service-not-allowed': 'Ses tanıma servisi kullanılamıyor',
+  'language-not-supported': 'Dil desteklenmiyor',
+}
+
 export function isSpeechSupported(): boolean {
   return !!(window.SpeechRecognition || window.webkitSpeechRecognition)
 }
@@ -36,10 +45,12 @@ export function isSpeechSupported(): boolean {
 export function useSpeechRecognition(onResult: (transcript: string) => void) {
   const [status, setStatus] = useState<SpeechStatus>('idle')
   const [interim, setInterim] = useState('')
+  const [error, setError] = useState<string | null>(null)
+  const [isSupported] = useState(() => isSpeechSupported())
   const recognitionRef = useRef<SpeechRecognitionInstance | null>(null)
 
   const start = useCallback(() => {
-    if (!isSpeechSupported()) return
+    if (!isSupported) return
 
     const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SpeechRecognitionCtor) return
@@ -69,13 +80,15 @@ export function useSpeechRecognition(onResult: (transcript: string) => void) {
       if (finalTranscript) {
         setStatus('processing')
         setInterim('')
+        setError(null)
         onResult(finalTranscript)
       }
     }
 
-    recognition.onerror = () => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       setStatus('idle')
       setInterim('')
+      setError(ERROR_MESSAGES[event.error] ?? 'Ses tanıma hatası')
     }
 
     recognition.onend = () => {
@@ -86,8 +99,9 @@ export function useSpeechRecognition(onResult: (transcript: string) => void) {
 
     recognitionRef.current = recognition
     setStatus('listening')
+    setError(null)
     recognition.start()
-  }, [onResult])
+  }, [isSupported, onResult])
 
   const stop = useCallback(() => {
     if (recognitionRef.current) {
@@ -103,5 +117,5 @@ export function useSpeechRecognition(onResult: (transcript: string) => void) {
     }
   }, [status, start, stop])
 
-  return { status, interim, toggle, isSupported: isSpeechSupported() }
+  return { status, interim, error, toggle, isSupported }
 }

@@ -1,0 +1,22 @@
+a5e2858 fix: auto-calc timer uses refs to avoid stale closures, silently skips errors
+edc5582 fix: auto-close unclosed parentheses before evaluation
+d7d94ef fix: voice input always auto-calculates with TTS, strip conversational noise words
+0b31799 feat: TTS for voice-triggered calculations and 1.5s auto-calculate on idle
+9bbce62 feat: restore MicButton and speech-to-math voice input
+f5e0988 feat: add TTS result reading and ilkokul/lise/universite theme system
+cd0f657 feat: speak calculation results aloud when triggered by voice input
+9cc6b8e feat: auto-calculate after voice input and handle conversational phrases
+daea8c0 feat: auto-calculate after voice input, handle conversational phrases, speak results
+ccdd3d4 fix: auto-close missing parentheses in expressions
+ca439fb fix: improve speechToMath to handle numeric values from Speech API
+9bcc2a8 feat: auto-close unclosed parentheses before evaluation
+c97644d feat: add theme support (dark/light/system) and Turkish speech-to-math input
+33304d9 feat: wire calculator app with dark mode UI, keyboard support, and history
+84b376e feat: add History panel with click-to-load
+498279a feat: add ButtonGrid with scientific and main button layouts
+f457d11 feat: add Display component for expression and result
+e637788 feat: add Button component with variant-based styling
+fd37a2e feat: add keyboard support hook with function shortcuts
+61eee37 feat: add useCalculator hook with state management, history, and angle mode
+93301c2 feat: add expression parser with mathjs, normalization, and degree/radian support
+aebf999 chore: scaffold vite + react-ts project with vitest
