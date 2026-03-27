@@ -2,6 +2,9 @@
 
 ## Bekleyen
 - [ ] Hesaplama istatistikleri — Toplam hesaplama sayisi, en cok kullanilan operator ve ortalama sonuc gibi istatistikleri tutan utility fonksiyonu (kaynak: codebase) [2026-03-27]
+- [ ] Ifade gecmisi arama — Gecmis hesaplamalar arasinda metin bazli arama yapan utility fonksiyonu (kaynak: web) [2026-03-27]
+- [ ] Birim donusturucu — Uzunluk, agirlik, sicaklik gibi temel birimleri donusturen utility fonksiyonu (kaynak: web) [2026-03-27]
+- [ ] Kok bulma (cbrt/nthroot) — Kupkok ve n'inci kok hesaplama destegi, parser'a cbrt() ve nthRoot() ekle (kaynak: codebase) [2026-03-27]
 
 ## Ertelenen
 
