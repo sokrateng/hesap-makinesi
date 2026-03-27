@@ -15,7 +15,7 @@ Hesap makinesi projesinde periyodik olarak calisan bir otonom agent. Her 2 saatt
 3. En uygun 1 feature'i implement eder
 4. Test eder ve commit atar
 
-Agent `CronCreate` tool'u ile 2 saatlik cron job olarak baslatilir ve session acik kaldigi surece calisir (max 7 gun, sonra otomatik expire).
+Agent `/loop 2h` komutuyla baslatilir ve session acik kaldigi surece periyodik calisir.
 
 ---
 
@@ -24,7 +24,7 @@ Agent `CronCreate` tool'u ile 2 saatlik cron job olarak baslatilir ve session ac
 | Karar | Secim | Alternatifler |
 |-------|-------|---------------|
 | Arastirma kaynagi | Web + Codebase | Sadece web, sadece codebase, statik liste |
-| Loop mekanizmasi | `CronCreate` (cron: `7 */2 * * *`, her 2 saatte) | CLI script + Task Scheduler, Remote Triggers |
+| Loop mekanizmasi | `/loop 2h` skill | CronCreate, CLI script + Task Scheduler, Remote Triggers |
 | Otonomi seviyesi | Tam otonom | Yari otonom (onay al), sadece arastirma |
 | Branch stratejisi | Master'da direkt | Her loop icin ayri branch |
 | Feature sayisi | 3 arastir, 1 implement | 1 per loop, zaman bazli |
@@ -149,9 +149,8 @@ hesap-makinesi/
 
 ### Acil Durdurma
 
-- **`Ctrl+C`** — Session'i sonlandirir, tum cron job'lar silinir
-- **`CronDelete <job-id>`** — Sadece feature-loop job'ini siler, session devam eder
-- **`CronList`** — Aktif job'lari listeler
+- **`Ctrl+C`** — Mevcut loop iterasyonunu durdurur
+- **`/loop stop`** — Loop'u tamamen sonlandirir
 
 Agent commit adimina ulasmadan durdurulursa, yarim kalan degisiklikler working directory'de kalir. Kullanici `git checkout .` ile temizleyebilir.
 
@@ -187,21 +186,15 @@ feat: add copy-to-clipboard button for calculation results
 
 ### Baslatma
 
-CronCreate tool'u ile baslatilir:
-
 ```
-CronCreate(
-  cron: "7 */2 * * *",       # Her 2 saatte bir (:07'de, yiginlasmayi onlemek icin)
-  prompt: ".claude/agents/feature-loop.md agent'ini calistir",
-  recurring: true
-)
+/loop 2h .claude/agents/feature-loop.md agent'ini calistir
 ```
 
-### Kontrol Komutlari
+### Kontrol
 
 ```
-CronList          # Aktif job'lari gor
-CronDelete <id>   # Durdur
+/loop status   # Loop durumunu gor
+/loop stop     # Durdur
 ```
 
-Session acik kaldigi surece calisir. Max 7 gun sonra otomatik expire olur.
+Session acik kaldigi surece her 2 saatte bir calisir.
