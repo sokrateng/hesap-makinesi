@@ -15,6 +15,10 @@ Sesli komut destekli, tema secenekli bilimsel hesap makinesi.
 - **Ters trigonometri** — asin, acos, atan butonlari (derece modunda otomatik donusum)
 - **Kombinatorik** — nCr (kombinasyon) ve nPr (permutasyon) fonksiyonlari
 - **OBEB/OKEK** — gcd ve lcm fonksiyonlari (Turkce: obeb/okek alias)
+- **Hiperbolik fonksiyonlar** — sinh, cosh, tanh butonlari
+- **Asal sayi kontrolu** — isPrime(n) ile asal kontrol, "prime?" butonu
+- **Modulo** — mod operatoru ile bolumden kalan hesaplama
+- **Yuvarlama** — round, ceil, floor fonksiyonlari (Turkce: yuvarla/tavan/taban)
 - **Rastgele sayi** — rand butonu ile rastgele sayi uretme
 - **Euler sabiti** — ℯ butonu ile Euler sayisi
 - **Ans (Son sonuc)** — Onceki hesaplama sonucunu yeni ifadede kullanma
