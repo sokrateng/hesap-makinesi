@@ -1,7 +1,6 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Euler sabiti (e) destegi — Bilimsel satirda e sabiti butonu ekle, parser'da e->e donusumu (kaynak: web) [2026-03-27]
 - [ ] Gecmisi temizle butonu — Hesap gecmisini tek tusla tamamen silme, localStorage dahil (kaynak: web) [2026-03-27]
 - [ ] Mutlak deger (abs) fonksiyonu — Bilimsel satirda |x| butonu, abs() parser destegi ile negatif sonuclari pozitife cevirme (kaynak: web) [2026-03-27]
 - [ ] Son sonucu kullanma (Ans) — Onceki hesap sonucunu yeni ifadede kullanmak icin Ans butonu ve degiskeni (kaynak: web) [2026-03-27]
@@ -10,6 +9,7 @@
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Euler sabiti (e) destegi — Bilimsel satirda e sabiti butonu ekle, parser'da ℯ->e donusumu [2026-03-27] [commit: 951cd6e]
 - [x] Silme (backspace) butonu — UI uzerinde ⌫ butonu ile son karakteri silme, klavyesiz kullanim icin (kaynak: codebase) [2026-03-27] [commit: 4a02bf2]
 - [x] Ifade gecmisi navigasyonu — Yon tuslariyla (ArrowUp/Down) gecmis ifadeler arasinda gezinme (kaynak: codebase) [2026-03-27] [commit: 5b46667]
 - [x] Klavye kisayol haritasi — useKeyboard mappinglerini disa acar, kisayol referans listesi olusturur (kaynak: codebase) [2026-03-27] [commit: 1c60b5a]
