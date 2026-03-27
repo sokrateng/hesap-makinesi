@@ -1,8 +1,6 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Hesaplama istatistikleri — Toplam hesaplama sayisi, en cok kullanilan operator ve ortalama sonuc gibi istatistikleri tutan utility fonksiyonu (kaynak: codebase) [2026-03-27]
-- [ ] Ifade gecmisi arama — Gecmis hesaplamalar arasinda metin bazli arama yapan utility fonksiyonu (kaynak: web) [2026-03-27]
 - [ ] Birim donusturucu — Uzunluk, agirlik, sicaklik gibi temel birimleri donusturen utility fonksiyonu (kaynak: web) [2026-03-27]
 - [ ] Kok bulma (cbrt/nthroot) — Kupkok ve n'inci kok hesaplama destegi, parser'a cbrt() ve nthRoot() ekle (kaynak: codebase) [2026-03-27]
 
@@ -25,3 +23,5 @@
 - [x] Sayi formatlama — Buyuk sonuclari locale-aware binlik ayirici ile goster [2026-03-27] [commit: 3310be3]
 - [x] Hafiza (memory) islemleri — M+, M-, MR, MC ile sonucu hafizaya al/geri cagir (kaynak: web) [2026-03-27] [commit: 82dc37d]
 - [x] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27] [commit: 78193a6]
+- [x] Hesaplama istatistikleri — Toplam hesaplama sayisi, en cok kullanilan operator ve ortalama sonuc gibi istatistikleri tutan utility fonksiyonu (kaynak: codebase) [2026-03-27] [commit: dc65ac6]
+- [x] Ifade gecmisi arama — Gecmis hesaplamalar arasinda metin bazli arama yapan utility fonksiyonu (kaynak: web) [2026-03-27] [commit: 643a0b4]
