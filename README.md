@@ -14,7 +14,14 @@ Sesli komut destekli, tema secenekli bilimsel hesap makinesi.
 - **Otomatik parantez kapatma** — `sin(90` veya `√(16` yazip esittire basinca parantez otomatik kapanir
 - **Klavye destegi** — Tum islemler klavyeden yapilabilir
 - **Gecmis paneli** — Son 20 hesaplama localStorage'da saklanir
+- **Gecmis navigasyonu** — Yukari/asagi ok tuslariyla onceki hesaplamalara gezinme
 - **Aci birimi** — DEG/RAD gecisi
+- **Sayi formatlama** — Buyuk sonuclar locale-aware binlik ayirici ile gosterilir
+- **Panoya kopyalama** — Sonuca tiklayinca panoya kopyalar, gorsel geri bildirim
+- **Faktoriyel** — `5!` seklinde faktoriyel hesaplama destegi
+- **Klavye kisayol haritasi** — Tum kisayollari gosteren acilir panel
+- **Hafiza islemleri** — M+, M-, MR, MC butonlari
+- **Silme butonu** — Dokunmatik kullanicilar icin ekranda ⌫ butonu
 
 ## Klavye Kisayollari
 
@@ -73,22 +80,31 @@ npm test
 ```
 src/
 ├── components/
-│   ├── Button.tsx          # Tek buton, variant bazli stil
-│   ├── ButtonGrid.tsx      # Bilimsel + ana buton gridi
-│   ├── Display.tsx         # Ifade + sonuc ekrani
-│   ├── History.tsx         # Gecmis paneli
-│   ├── MicButton.tsx       # Mikrofon butonu
-│   └── ThemeToggle.tsx     # Tema degistirme butonu
+│   ├── BackspaceButton.tsx      # Ekranda silme butonu
+│   ├── Button.tsx               # Tek buton, variant bazli stil
+│   ├── ButtonGrid.tsx           # Bilimsel + ana buton gridi
+│   ├── Display.tsx              # Ifade + sonuc ekrani (kopyalama destekli)
+│   ├── History.tsx              # Gecmis paneli
+│   ├── KeyboardShortcutPanel.tsx # Klavye kisayol haritasi paneli
+│   ├── MemoryButtons.tsx        # M+, M-, MR, MC butonlari
+│   ├── MicButton.tsx            # Mikrofon butonu
+│   └── ThemeToggle.tsx          # Tema degistirme butonu
 ├── hooks/
-│   ├── useCalculator.ts    # Hesaplama state yonetimi
-│   ├── useKeyboard.ts      # Klavye dinleyici
+│   ├── useCalculator.ts         # Hesaplama state yonetimi
+│   ├── useCopyToClipboard.ts    # Panoya kopyalama hook
+│   ├── useHistoryNavigation.ts  # Ok tuslariyla gecmis gezinme
+│   ├── useKeyboard.ts           # Klavye dinleyici
+│   ├── useMemory.ts             # Hafiza islemleri (M+/M-/MR/MC)
 │   ├── useSpeechRecognition.ts  # Web Speech API hook
-│   └── useTheme.ts         # Tema yonetimi
+│   └── useTheme.ts              # Tema yonetimi
 ├── utils/
-│   ├── parser.ts           # mathjs wrapper, normalizasyon
-│   ├── speakResult.ts      # TTS ile sonuc okuma
-│   └── speechToMath.ts     # Turkce konusmayi matematik ifadesine cevirme
-├── App.tsx                 # Ana bilesen
-├── App.css                 # Global stiller
-└── theme.css               # Tema CSS degiskenleri
+│   ├── clipboard.ts             # Clipboard API wrapper
+│   ├── formatNumber.ts          # Locale-aware sayi formatlama
+│   ├── keyboardShortcuts.ts     # Kisayol verileri ve yardimcilar
+│   ├── parser.ts                # mathjs wrapper, normalizasyon, faktoriyel
+│   ├── speakResult.ts           # TTS ile sonuc okuma
+│   └── speechToMath.ts          # Turkce konusmayi matematik ifadesine cevirme
+├── App.tsx                      # Ana bilesen
+├── App.css                      # Global stiller
+└── theme.css                    # Tema CSS degiskenleri
 ```
