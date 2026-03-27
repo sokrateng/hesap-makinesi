@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { evaluate, type AngleMode } from '../utils/parser'
 import { speakResult } from '../utils/speakResult'
+import { resolveAns, setAns } from '../utils/ansStore'
 
 interface HistoryEntry {
   expression: string
@@ -52,7 +53,8 @@ export function useCalculator() {
   const doCalculate = useCallback((expr: string, mode: AngleMode, speak: boolean) => {
     if (!expr.trim()) return
 
-    const { result: calcResult, error: calcError } = evaluate(expr, mode)
+    const resolved = resolveAns(expr)
+    const { result: calcResult, error: calcError } = evaluate(resolved, mode)
 
     if (calcError) {
       setError(calcError)
@@ -61,6 +63,7 @@ export function useCalculator() {
 
     setResult(calcResult!)
     setError(null)
+    setAns(calcResult!)
 
     if (speak) {
       speakResult(expr, calcResult!)
@@ -94,10 +97,12 @@ export function useCalculator() {
     autoCalcTimer.current = setTimeout(() => {
       const expr = expressionRef.current
       if (!expr.trim()) return
-      const { result: calcResult, error: calcError } = evaluate(expr, angleModeRef.current)
+      const resolved = resolveAns(expr)
+      const { result: calcResult, error: calcError } = evaluate(resolved, angleModeRef.current)
       if (calcError || calcResult === null) return
       setResult(calcResult)
       setError(null)
+      setAns(calcResult)
       const entry: HistoryEntry = { expression: expr, result: calcResult, timestamp: Date.now() }
       setHistory(prev => {
         const updated = [entry, ...prev].slice(0, MAX_HISTORY)

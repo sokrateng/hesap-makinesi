@@ -3,6 +3,7 @@
 ## Bekleyen
 - [ ] Son sonucu kullanma (Ans) — Onceki hesap sonucunu yeni ifadede kullanmak icin Ans butonu ve degiskeni (kaynak: web) [2026-03-27]
 - [ ] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27]
+- [ ] Yuzde hesaplama gostergesi — Yuzde butonuna basildiginda ara sonucu canli onizleme ile gosterme, ifade ve sonuc ayri goruntulenir (kaynak: codebase) [2026-03-27]
 
 ## Ertelenen
 
