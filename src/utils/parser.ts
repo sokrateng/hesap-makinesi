@@ -3,6 +3,8 @@ import { normalizeRoots } from './rootFunctions'
 import { normalizeLogarithms } from './logarithm'
 import { normalizePowers } from './powerFunctions'
 import { normalizeInverseTrig, inverseTrigToDegrees } from './inverseTrig'
+import { normalizeCombinatorics } from './combinatorics'
+import { normalizeGcdLcm } from './gcdLcm'
 
 const math: MathJsStatic = create(all, {})
 
@@ -48,6 +50,8 @@ export function normalize(expression: string): string {
   expr = normalizeRoots(expr)
   expr = normalizeLogarithms(expr)
   expr = normalizePowers(expr)
+  expr = normalizeCombinatorics(expr)
+  expr = normalizeGcdLcm(expr)
 
   const open = (expr.match(/\(/g) || []).length
   const close = (expr.match(/\)/g) || []).length
