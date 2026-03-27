@@ -1,13 +1,13 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Mutlak deger (abs) fonksiyonu — Bilimsel satirda |x| butonu, abs() parser destegi ile negatif sonuclari pozitife cevirme (kaynak: web) [2026-03-27]
 - [ ] Son sonucu kullanma (Ans) — Onceki hesap sonucunu yeni ifadede kullanmak icin Ans butonu ve degiskeni (kaynak: web) [2026-03-27]
 - [ ] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Mutlak deger (abs) fonksiyonu — Bilimsel satirda |x| butonu, abs() parser destegi ile negatif sonuclari pozitife cevirme [2026-03-27] [commit: e28b9d3]
 - [x] Gecmisi temizle butonu — Hesap gecmisini tek tusla tamamen silme, localStorage dahil (kaynak: web) [2026-03-27] [commit: 26be85d]
 - [x] Euler sabiti (e) destegi — Bilimsel satirda e sabiti butonu ekle, parser'da ℯ->e donusumu [2026-03-27] [commit: 951cd6e]
 - [x] Silme (backspace) butonu — UI uzerinde ⌫ butonu ile son karakteri silme, klavyesiz kullanim icin (kaynak: codebase) [2026-03-27] [commit: 4a02bf2]
