@@ -8,6 +8,8 @@ import { useCopyToClipboard } from './hooks/useCopyToClipboard'
 import { useMemory } from './hooks/useMemory'
 import { speechToMath } from './utils/speechToMath'
 import { Display } from './components/Display'
+import { BaseConversionDisplay } from './components/BaseConversionDisplay'
+import { ValidationWarnings } from './components/ValidationWarnings'
 import { ButtonGrid } from './components/ButtonGrid'
 import { MemoryButtons } from './components/MemoryButtons'
 import { History } from './components/History'
@@ -109,6 +111,7 @@ function App() {
             {speech.error}
           </div>
         )}
+        <ValidationWarnings expression={calc.expression} />
         <Display
           expression={calc.expression}
           result={calc.result}
@@ -116,6 +119,7 @@ function App() {
           copyStatus={clipboard.status}
           onCopyResult={handleCopyResult}
         />
+        <BaseConversionDisplay result={calc.result} error={calc.error} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '6px' }}>
           <MemoryButtons
             hasMemory={mem.hasMemory}

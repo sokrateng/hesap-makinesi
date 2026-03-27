@@ -7,6 +7,8 @@
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Sayi tabani donusumu UI entegrasyonu — Hesap sonucu tam sayi oldugunda sonucun altinda BIN/OCT/HEX gosterimi (BaseConversionDisplay komponenti) [2026-03-27]
+- [x] Ifade dogrulama UI entegrasyonu — Kullanici ifade girerken eslesmemis parantez, ardisik operator gibi uyarilari canli gosterme (ValidationWarnings komponenti) [2026-03-27]
 - [x] Kombinatorik fonksiyonlar (nCr/nPr) — Kombinasyon ve permutasyon hesaplama utility fonksiyonu ve parser destegi (kaynak: codebase) [2026-03-27] [commit: c29be3a]
 - [x] OBEB/OKEK hesaplama (gcd/lcm) — Iki veya daha fazla sayinin ortak bolen ve katini hesaplayan utility fonksiyonu (kaynak: web) [2026-03-27] [commit: bac80d9]
 - [x] Logaritma destegi (log/ln) — log10 ve dogal logaritma (ln) fonksiyonlari icin parser normalizasyonu, log() ve ln() buton destegi (kaynak: codebase) [2026-03-27] [commit: 47cfeef]
