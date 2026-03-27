@@ -3,6 +3,7 @@ import { useCalculator } from './hooks/useCalculator'
 import { useKeyboard } from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
 import { useSpeechRecognition } from './hooks/useSpeechRecognition'
+import { useCopyToClipboard } from './hooks/useCopyToClipboard'
 import { speechToMath } from './utils/speechToMath'
 import { Display } from './components/Display'
 import { ButtonGrid } from './components/ButtonGrid'
@@ -15,6 +16,13 @@ import './App.css'
 function App() {
   const calc = useCalculator()
   const { theme, cycleTheme } = useTheme()
+  const clipboard = useCopyToClipboard()
+
+  const handleCopyResult = useCallback(() => {
+    if (calc.result) {
+      clipboard.copy(calc.result)
+    }
+  }, [calc.result, clipboard.copy])
 
   const handleSpeechResult = useCallback((transcript: string) => {
     const result = speechToMath(transcript)
@@ -74,6 +82,8 @@ function App() {
           expression={calc.expression}
           result={calc.result}
           error={calc.error}
+          copyStatus={clipboard.status}
+          onCopyResult={handleCopyResult}
         />
         <ButtonGrid
           onAppend={calc.append}
