@@ -29,7 +29,7 @@ function App() {
     if (expr) calc.append(expr)
   }, [calc.clear, calc.append])
 
-  const historyNav = useHistoryNavigation({
+  useHistoryNavigation({
     history: calc.history,
     onSelect: handleHistorySelect,
   })

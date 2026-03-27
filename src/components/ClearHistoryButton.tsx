@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 
 interface ClearHistoryButtonProps {
   onClear: () => void
   disabled?: boolean
 }
 
-export function ClearHistoryButton({ onClear, disabled = false }: ClearHistoryButtonProps): JSX.Element | null {
+export function ClearHistoryButton({ onClear, disabled = false }: ClearHistoryButtonProps): React.ReactElement | null {
   const [confirming, setConfirming] = useState(false)
 
   const handleClick = useCallback(() => {

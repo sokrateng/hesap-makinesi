@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 import { useHistoryNavigation } from './useHistoryNavigation'
 
@@ -11,10 +11,10 @@ function makeHistory(expressions: string[]) {
 }
 
 describe('useHistoryNavigation', () => {
-  let onSelect: ReturnType<typeof vi.fn>
+  let onSelect: Mock<(expression: string) => void>
 
   beforeEach(() => {
-    onSelect = vi.fn()
+    onSelect = vi.fn<(expression: string) => void>()
   })
 
   it('starts with index -1 (not navigating)', () => {

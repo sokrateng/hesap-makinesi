@@ -42,7 +42,7 @@ Use Grep and Read to analyze:
 Produce exactly 3 new feature ideas. For each:
 - Ensure it does NOT duplicate any item already in Bekleyen, Ertelenen, or Tamamlanan
 - Ensure it can be implemented WITHOUT adding new npm dependencies
-- Ensure it is small enough for a single component/hook/util file (under 200 lines)
+- Ensure it is small enough for a single component/hook/util file (under 500 lines)
 
 Add them to `docs/features.md` under "## Bekleyen" in this format:
 ```
@@ -51,7 +51,7 @@ Add them to `docs/features.md` under "## Bekleyen" in this format:
 
 ## STEP 3: Select Feature
 
-Pick the FIRST unchecked item from "## Bekleyen".
+Pick the FIRST and SECOND unchecked item from "## Bekleyen".
 
 ## STEP 4: Implement
 
@@ -67,7 +67,7 @@ Now implement the selected feature:
   - Hooks → `src/hooks/`
   - Utilities → `src/utils/`
 - Write a test file alongside the implementation (e.g., `MyComponent.test.tsx`)
-- Keep each new file under 200 lines
+- Keep each new file under 500 lines
 - Do NOT modify existing files' public APIs
 - Do NOT add dependencies to package.json
 - Do NOT modify vite.config.ts, tsconfig.json, or tsconfig.*.json
@@ -116,7 +116,7 @@ git commit --amend --no-edit
 3. NEVER modify or delete existing test files.
 4. NEVER modify vite.config.ts, tsconfig.json, tsconfig.app.json, tsconfig.node.json.
 5. NEVER change the public API of existing components (props, exports).
-6. NEVER create a file over 200 lines.
+6. NEVER create a file over 500 lines.
 7. ALWAYS run `npm run test` before AND after implementing.
 8. ALWAYS commit with conventional commit format.
 9. If existing tests are broken BEFORE you start, STOP immediately.
