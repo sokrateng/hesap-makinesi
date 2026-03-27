@@ -2,6 +2,7 @@ import { create, all, type MathJsStatic } from 'mathjs'
 import { normalizeRoots } from './rootFunctions'
 import { normalizeLogarithms } from './logarithm'
 import { normalizePowers } from './powerFunctions'
+import { normalizeInverseTrig, inverseTrigToDegrees } from './inverseTrig'
 
 const math: MathJsStatic = create(all, {})
 
@@ -43,6 +44,7 @@ export function normalize(expression: string): string {
 
   expr = normalizeAbsoluteValue(expr)
   expr = normalizeFactorial(expr)
+  expr = normalizeInverseTrig(expr)
   expr = normalizeRoots(expr)
   expr = normalizeLogarithms(expr)
   expr = normalizePowers(expr)
@@ -60,10 +62,15 @@ function toRadians(expr: string): string {
   const trigFns = ['sin', 'cos', 'tan']
   let result = expr
   for (const fn of trigFns) {
-    const regex = new RegExp(`${fn}\\(`, 'g')
+    // Negative lookbehind: skip asin/acos/atan (preceded by 'a')
+    const regex = new RegExp(`(?<![a-zA-Z])${fn}\\(`, 'g')
     result = result.replace(regex, `${fn}(pi/180 * `)
   }
   return result
+}
+
+function fromRadians(expr: string): string {
+  return inverseTrigToDegrees(expr)
 }
 
 export function evaluate(
@@ -75,6 +82,7 @@ export function evaluate(
 
     if (angleMode === 'deg') {
       normalized = toRadians(normalized)
+      normalized = fromRadians(normalized)
     }
 
     const raw = math.evaluate(normalized)
