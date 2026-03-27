@@ -19,6 +19,7 @@ const SCIENTIFIC_ROW: ButtonDef[] = [
   { label: ')', value: ')', variant: 'scientific' },
   { label: 'π', value: 'π', variant: 'scientific' },
   { label: 'ℯ', value: 'ℯ', variant: 'scientific' },
+  { label: '|x|', value: 'abs(', variant: 'scientific' },
 ]
 
 const MAIN_GRID: ButtonDef[] = [
@@ -67,7 +68,7 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
+          gridTemplateColumns: 'repeat(6, 1fr)',
           gap: '6px',
           marginBottom: '6px',
         }}

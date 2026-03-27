@@ -20,6 +20,16 @@ export function normalizeFactorial(expr: string): string {
   return result
 }
 
+export function normalizeAbsoluteValue(expr: string): string {
+  let result = expr
+  let prev = ''
+  while (prev !== result) {
+    prev = result
+    result = result.replace(/\|([^|]+)\|/g, 'abs($1)')
+  }
+  return result
+}
+
 export function normalize(expression: string): string {
   let expr = expression
     .replace(/×/g, '*')
@@ -28,6 +38,7 @@ export function normalize(expression: string): string {
     .replace(/π/g, 'pi')
     .replace(/ℯ/g, 'e')
 
+  expr = normalizeAbsoluteValue(expr)
   expr = normalizeFactorial(expr)
 
   const open = (expr.match(/\(/g) || []).length
