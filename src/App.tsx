@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import { useCalculator } from './hooks/useCalculator'
 import { useKeyboard } from './hooks/useKeyboard'
+import { useHistoryNavigation } from './hooks/useHistoryNavigation'
 import { useTheme } from './hooks/useTheme'
 import { useSpeechRecognition } from './hooks/useSpeechRecognition'
 import { useCopyToClipboard } from './hooks/useCopyToClipboard'
@@ -20,6 +21,16 @@ function App() {
   const { theme, cycleTheme } = useTheme()
   const clipboard = useCopyToClipboard()
   const mem = useMemory()
+
+  const handleHistorySelect = useCallback((expr: string) => {
+    calc.clear()
+    if (expr) calc.append(expr)
+  }, [calc.clear, calc.append])
+
+  const historyNav = useHistoryNavigation({
+    history: calc.history,
+    onSelect: handleHistorySelect,
+  })
 
   const handleMemoryAdd = useCallback(() => {
     const val = parseFloat(calc.result)
