@@ -7,6 +7,7 @@
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Toplu UI entegrasyonu — asin/acos/atan, x²/x³, ∛, nCr/nPr, gcd/lcm, rand butonlari ButtonGrid'e eklendi; History bilesenine arama input'u eklendi [2026-03-27]
 - [x] Sayi tabani donusumu UI entegrasyonu — Hesap sonucu tam sayi oldugunda sonucun altinda BIN/OCT/HEX gosterimi (BaseConversionDisplay komponenti) [2026-03-27]
 - [x] Ifade dogrulama UI entegrasyonu — Kullanici ifade girerken eslesmemis parantez, ardisik operator gibi uyarilari canli gosterme (ValidationWarnings komponenti) [2026-03-27]
 - [x] Kombinatorik fonksiyonlar (nCr/nPr) — Kombinasyon ve permutasyon hesaplama utility fonksiyonu ve parser destegi (kaynak: codebase) [2026-03-27] [commit: c29be3a]

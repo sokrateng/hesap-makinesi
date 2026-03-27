@@ -1,3 +1,6 @@
+import { useState, useMemo } from 'react'
+import { searchHistory } from '../utils/searchHistory'
+
 interface HistoryEntry {
   expression: string
   result: string
@@ -10,6 +13,15 @@ interface HistoryProps {
 }
 
 export function History({ entries, onLoad }: HistoryProps) {
+  const [query, setQuery] = useState('')
+
+  const filteredEntries = useMemo(() => {
+    if (query.trim() === '') {
+      return entries.map((entry, i) => ({ entry, originalIndex: i }))
+    }
+    return searchHistory(entries, query)
+  }, [entries, query])
+
   if (entries.length === 0) return null
 
   return (
@@ -19,7 +31,7 @@ export function History({ entries, onLoad }: HistoryProps) {
         borderRadius: '12px',
         padding: '12px',
         marginTop: '12px',
-        maxHeight: '200px',
+        maxHeight: '240px',
         overflowY: 'auto',
         transition: 'background-color 300ms',
       }}
@@ -27,10 +39,33 @@ export function History({ entries, onLoad }: HistoryProps) {
       <div style={{ color: 'var(--text-history-label)', fontSize: '12px', marginBottom: '8px' }}>
         Gecmis
       </div>
-      {entries.map((entry, i) => (
+      <input
+        type="text"
+        placeholder="Gecmiste ara..."
+        value={query}
+        onChange={e => setQuery(e.target.value)}
+        style={{
+          width: '100%',
+          padding: '6px 10px',
+          marginBottom: '8px',
+          border: '1px solid var(--text-history-label)',
+          borderRadius: '8px',
+          backgroundColor: 'transparent',
+          color: 'var(--text-history-expr)',
+          fontSize: '13px',
+          outline: 'none',
+          boxSizing: 'border-box',
+        }}
+      />
+      {filteredEntries.length === 0 && query.trim() !== '' && (
+        <div style={{ color: 'var(--text-history-label)', fontSize: '12px', textAlign: 'center', padding: '8px' }}>
+          Sonuc bulunamadi
+        </div>
+      )}
+      {filteredEntries.map(({ entry, originalIndex }) => (
         <div
           key={entry.timestamp}
-          onClick={() => onLoad(i)}
+          onClick={() => onLoad(originalIndex)}
           style={{
             padding: '8px',
             borderRadius: '8px',

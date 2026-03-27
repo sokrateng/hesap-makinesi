@@ -7,19 +7,39 @@ interface ButtonDef {
   wide?: boolean
 }
 
-const SCIENTIFIC_ROW: ButtonDef[] = [
-  { label: 'sin', value: 'sin(', variant: 'scientific' },
-  { label: 'cos', value: 'cos(', variant: 'scientific' },
-  { label: 'tan', value: 'tan(', variant: 'scientific' },
-  { label: 'log', value: 'log10(', variant: 'scientific' },
-  { label: 'ln', value: 'ln(', variant: 'scientific' },
-  { label: '√', value: '√(', variant: 'scientific' },
-  { label: '^', value: '^', variant: 'scientific' },
-  { label: '(', value: '(', variant: 'scientific' },
-  { label: ')', value: ')', variant: 'scientific' },
-  { label: 'π', value: 'π', variant: 'scientific' },
-  { label: 'ℯ', value: 'ℯ', variant: 'scientific' },
-  { label: '|x|', value: 'abs(', variant: 'scientific' },
+const SCIENTIFIC_ROWS: ButtonDef[][] = [
+  [
+    { label: 'sin', value: 'sin(', variant: 'scientific' },
+    { label: 'cos', value: 'cos(', variant: 'scientific' },
+    { label: 'tan', value: 'tan(', variant: 'scientific' },
+    { label: 'asin', value: 'arcsin(', variant: 'scientific' },
+    { label: 'acos', value: 'arccos(', variant: 'scientific' },
+    { label: 'atan', value: 'arctan(', variant: 'scientific' },
+  ],
+  [
+    { label: 'log', value: 'log10(', variant: 'scientific' },
+    { label: 'ln', value: 'ln(', variant: 'scientific' },
+    { label: '√', value: '√(', variant: 'scientific' },
+    { label: '∛', value: '∛(', variant: 'scientific' },
+    { label: '^', value: '^', variant: 'scientific' },
+    { label: '|x|', value: 'abs(', variant: 'scientific' },
+  ],
+  [
+    { label: 'π', value: 'π', variant: 'scientific' },
+    { label: 'ℯ', value: 'ℯ', variant: 'scientific' },
+    { label: 'x²', value: '²', variant: 'scientific' },
+    { label: 'x³', value: '³', variant: 'scientific' },
+    { label: '(', value: '(', variant: 'scientific' },
+    { label: ')', value: ')', variant: 'scientific' },
+  ],
+  [
+    { label: 'nCr', value: 'nCr(', variant: 'scientific' },
+    { label: 'nPr', value: 'nPr(', variant: 'scientific' },
+    { label: 'gcd', value: 'gcd(', variant: 'scientific' },
+    { label: 'lcm', value: 'lcm(', variant: 'scientific' },
+    { label: 'rand', value: 'rand', variant: 'scientific' },
+    { label: '!', value: '!', variant: 'scientific' },
+  ],
 ]
 
 const MAIN_GRID: ButtonDef[] = [
@@ -59,26 +79,34 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
       case 'equals': onCalculate(); break
       case 'percent': onPercent(); break
       case 'negate': onNegate(); break
+      case 'rand': {
+        const r = Math.random().toFixed(4)
+        onAppend(r)
+        break
+      }
       default: onAppend(value)
     }
   }
 
   return (
     <div>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(6, 1fr)',
-          gap: '6px',
-          marginBottom: '6px',
-        }}
-      >
-        {SCIENTIFIC_ROW.map(btn => (
-          <Button key={btn.label} variant={btn.variant} onClick={() => handleClick(btn.value)}>
-            {btn.label}
-          </Button>
-        ))}
-      </div>
+      {SCIENTIFIC_ROWS.map((row, rowIndex) => (
+        <div
+          key={rowIndex}
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+            gap: '6px',
+            marginBottom: '6px',
+          }}
+        >
+          {row.map(btn => (
+            <Button key={btn.label} variant={btn.variant} onClick={() => handleClick(btn.value)}>
+              {btn.label}
+            </Button>
+          ))}
+        </div>
+      ))}
       <div
         style={{
           display: 'grid',
