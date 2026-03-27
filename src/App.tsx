@@ -4,9 +4,11 @@ import { useKeyboard } from './hooks/useKeyboard'
 import { useTheme } from './hooks/useTheme'
 import { useSpeechRecognition } from './hooks/useSpeechRecognition'
 import { useCopyToClipboard } from './hooks/useCopyToClipboard'
+import { useMemory } from './hooks/useMemory'
 import { speechToMath } from './utils/speechToMath'
 import { Display } from './components/Display'
 import { ButtonGrid } from './components/ButtonGrid'
+import { MemoryButtons } from './components/MemoryButtons'
 import { History } from './components/History'
 import { ThemeToggle } from './components/ThemeToggle'
 import { MicButton } from './components/MicButton'
@@ -17,6 +19,22 @@ function App() {
   const calc = useCalculator()
   const { theme, cycleTheme } = useTheme()
   const clipboard = useCopyToClipboard()
+  const mem = useMemory()
+
+  const handleMemoryAdd = useCallback(() => {
+    const val = parseFloat(calc.result)
+    if (!isNaN(val)) mem.memoryAdd(val)
+  }, [calc.result, mem.memoryAdd])
+
+  const handleMemorySubtract = useCallback(() => {
+    const val = parseFloat(calc.result)
+    if (!isNaN(val)) mem.memorySubtract(val)
+  }, [calc.result, mem.memorySubtract])
+
+  const handleMemoryRecall = useCallback(() => {
+    const recalled = mem.memoryRecall()
+    if (recalled !== null) calc.append(String(recalled))
+  }, [mem.memoryRecall, calc.append])
 
   const handleCopyResult = useCallback(() => {
     if (calc.result) {
@@ -84,6 +102,13 @@ function App() {
           error={calc.error}
           copyStatus={clipboard.status}
           onCopyResult={handleCopyResult}
+        />
+        <MemoryButtons
+          hasMemory={mem.hasMemory}
+          onMemoryAdd={handleMemoryAdd}
+          onMemorySubtract={handleMemorySubtract}
+          onMemoryRecall={handleMemoryRecall}
+          onMemoryClear={mem.memoryClear}
         />
         <ButtonGrid
           onAppend={calc.append}

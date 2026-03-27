@@ -3,6 +3,9 @@
 ## Bekleyen
 - [ ] Hafiza (memory) islemleri — M+, M-, MR, MC ile sonucu hafizaya al/geri cagir (kaynak: web) [2026-03-27]
 - [ ] Ifade gecmisi navigasyonu — Yön tuslariyla (ArrowUp/Down) gecmis ifadeler arasinda gezinme (kaynak: codebase) [2026-03-27]
+- [ ] Silme (backspace) butonu — UI uzerinde ⌫ butonu ile son karakteri silme, klavyesiz kullanim icin (kaynak: codebase) [2026-03-27]
+- [ ] Euler sabiti (e) destegi — Bilimsel satirda e sabiti butonu ekle, parser'da e->e donusumu (kaynak: web) [2026-03-27]
+- [ ] Gecmisi temizle butonu — Hesap gecmisini tek tusla tamamen silme, localStorage dahil (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
