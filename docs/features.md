@@ -1,12 +1,14 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Kombinatorik fonksiyonlar (nCr/nPr) — Kombinasyon ve permutasyon hesaplama utility fonksiyonu ve parser destegi (kaynak: codebase) [2026-03-27]
-- [ ] OBEB/OKEK hesaplama (gcd/lcm) — Iki veya daha fazla sayinin ortak bolen ve katini hesaplayan utility fonksiyonu (kaynak: web) [2026-03-27]
+- [ ] Hiperbolik fonksiyonlar (sinh/cosh/tanh) — Hiperbolik sinüs, kosinüs ve tanjant fonksiyonlari icin parser normalizasyonu ve hesaplama destegi (kaynak: codebase) [2026-03-27]
+- [ ] Asal sayi kontrolu (isPrime) — Bir sayinin asal olup olmadigini kontrol eden utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Kombinatorik fonksiyonlar (nCr/nPr) — Kombinasyon ve permutasyon hesaplama utility fonksiyonu ve parser destegi (kaynak: codebase) [2026-03-27] [commit: c29be3a]
+- [x] OBEB/OKEK hesaplama (gcd/lcm) — Iki veya daha fazla sayinin ortak bolen ve katini hesaplayan utility fonksiyonu (kaynak: web) [2026-03-27] [commit: bac80d9]
 - [x] Logaritma destegi (log/ln) — log10 ve dogal logaritma (ln) fonksiyonlari icin parser normalizasyonu, log() ve ln() buton destegi (kaynak: codebase) [2026-03-27] [commit: 47cfeef]
 - [x] Kare ve kup alma (x^2/x^3) — Mevcut ifadeyi hizlica karesi ve kubu icin utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27] [commit: 9a42889]
 - [x] Birim donusturucu — Uzunluk, agirlik, sicaklik gibi temel birimleri donusturen utility fonksiyonu (kaynak: web) [2026-03-27] [commit: e12bbf9]
