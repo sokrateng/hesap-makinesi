@@ -18,6 +18,7 @@ const SCIENTIFIC_ROW: ButtonDef[] = [
   { label: '(', value: '(', variant: 'scientific' },
   { label: ')', value: ')', variant: 'scientific' },
   { label: 'π', value: 'π', variant: 'scientific' },
+  { label: 'ℯ', value: 'ℯ', variant: 'scientific' },
 ]
 
 const MAIN_GRID: ButtonDef[] = [

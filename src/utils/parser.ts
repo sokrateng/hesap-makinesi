@@ -26,6 +26,7 @@ export function normalize(expression: string): string {
     .replace(/÷/g, '/')
     .replace(/√\(/g, 'sqrt(')
     .replace(/π/g, 'pi')
+    .replace(/ℯ/g, 'e')
 
   expr = normalizeFactorial(expr)
 
