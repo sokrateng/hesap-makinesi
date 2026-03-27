@@ -7,6 +7,7 @@
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Silme (backspace) butonu — UI uzerinde ⌫ butonu ile son karakteri silme, klavyesiz kullanim icin (kaynak: codebase) [2026-03-27] [commit: 4a02bf2]
 - [x] Ifade gecmisi navigasyonu — Yon tuslariyla (ArrowUp/Down) gecmis ifadeler arasinda gezinme (kaynak: codebase) [2026-03-27] [commit: 5b46667]
 - [x] Klavye kisayol haritasi — useKeyboard mappinglerini disa acar, kisayol referans listesi olusturur (kaynak: codebase) [2026-03-27] [commit: 1c60b5a]
 - [x] Faktoriyel destegi — Parser'a ! faktoriyel operatoru ekle (kaynak: codebase) [2026-03-27] [commit: fe89c39]
