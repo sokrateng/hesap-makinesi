@@ -1,12 +1,16 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Modulo operatoru (mod) — Mod islemi icin parser destegi ve buton, ornegin 5 mod 3 = 2 (kaynak: codebase) [2026-03-27]
-- [ ] Sayi yuvarlama (round/ceil/floor) — Yuvarlama fonksiyonlari icin parser normalizasyonu ve bilimsel butonlar (kaynak: web) [2026-03-27]
+- [ ] Yuzdelik degisim hesaplama (deltaPercent) — Iki sayi arasindaki yuzdelik degisimi hesaplayan utility ve UI butonu, ornegin deltaPercent(50,75) = %50 (kaynak: web) [2026-03-27]
+- [ ] Sayi carpanlarina ayirma (factorize) — Bir sayinin asal carpanlarini gosteren utility ve UI butonu, ornegin factorize(12) = 2×2×3 (kaynak: web) [2026-03-27]
+- [ ] Isaret fonksiyonu (sign) — Bir sayinin isaretini donduren fonksiyon: sign(-5) = -1, sign(0) = 0, sign(3) = 1, bilimsel buton (kaynak: web) [2026-03-27]
+- [ ] Minimum/Maksimum fonksiyonu (min/max) — Birden fazla sayi arasinda en kucuk ve en buyugu bulan min()/max() fonksiyonlari ve butonlar (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Modulo operatoru (mod) — Mod islemi icin parser destegi ve buton, ornegin 5 mod 3 = 2 (kaynak: codebase) [2026-03-27] [commit: 0d75e5b]
+- [x] Sayi yuvarlama (round/ceil/floor) — Yuvarlama fonksiyonlari icin parser normalizasyonu ve bilimsel butonlar (kaynak: web) [2026-03-27] [commit: 3e97930]
 - [x] Hiperbolik fonksiyonlar (sinh/cosh/tanh) — Hiperbolik sinüs, kosinüs ve tanjant fonksiyonlari icin parser normalizasyonu ve hesaplama destegi (kaynak: codebase) [2026-03-27] [commit: a6b6299]
 - [x] Asal sayi kontrolu (isPrime) — Bir sayinin asal olup olmadigini kontrol eden utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27] [commit: 33bd7af]
 - [x] Toplu UI entegrasyonu — asin/acos/atan, x²/x³, ∛, nCr/nPr, gcd/lcm, rand butonlari ButtonGrid'e eklendi; History bilesenine arama input'u eklendi [2026-03-27]
