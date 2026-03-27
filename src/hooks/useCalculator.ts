@@ -134,6 +134,15 @@ export function useCalculator() {
     }
   }, [history, clearAutoCalcTimer])
 
+  const clearHistory = useCallback(() => {
+    setHistory([])
+    try {
+      localStorage.removeItem(HISTORY_KEY)
+    } catch {
+      // localStorage may be unavailable
+    }
+  }, [])
+
   const toggleAngleMode = useCallback(() => {
     setAngleMode(prev => (prev === 'deg' ? 'rad' : 'deg'))
   }, [])
@@ -162,7 +171,7 @@ export function useCalculator() {
 
   return {
     expression, result, error, history, angleMode,
-    append, clear, deleteLast, calculate, appendAndCalculate, loadFromHistory,
+    append, clear, clearHistory, deleteLast, calculate, appendAndCalculate, loadFromHistory,
     toggleAngleMode, applyPercent, applyNegate,
   }
 }

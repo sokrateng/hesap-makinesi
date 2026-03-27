@@ -14,6 +14,7 @@ import { History } from './components/History'
 import { ThemeToggle } from './components/ThemeToggle'
 import { MicButton } from './components/MicButton'
 import { BackspaceButton } from './components/BackspaceButton'
+import { ClearHistoryButton } from './components/ClearHistoryButton'
 import './theme.css'
 import './App.css'
 
@@ -138,6 +139,10 @@ function App() {
         <History
           entries={calc.history}
           onLoad={calc.loadFromHistory}
+        />
+        <ClearHistoryButton
+          onClear={calc.clearHistory}
+          disabled={calc.history.length === 0}
         />
       </div>
     </div>
