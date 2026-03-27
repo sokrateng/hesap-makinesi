@@ -1,14 +1,14 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Yuzde hesaplama gostergesi — Yuzde butonuna basildiginda ara sonucu canli onizleme ile gosterme, ifade ve sonuc ayri goruntulenir (kaynak: codebase) [2026-03-27]
-- [ ] useKeyboard hook testleri — Klavye kisayollarinin dogru calismasi icin unit testler, KEY_MAP ve ozel tuslar dahil (kaynak: codebase) [2026-03-27]
 - [ ] Sayi tabani donusumu (bin/oct/hex) — Hesap sonucunu ikilik, sekizlik ve onaltilik tabanlarda gosterme utility fonksiyonu (kaynak: web) [2026-03-27]
 - [ ] Ifade dogrulama — Girdinin gecerli matematiksel ifade olup olmadigini kontrol eden validate fonksiyonu, eslesmemis parantez ve ardisik operator tespiti (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Yuzde hesaplama gostergesi — Yuzde butonuna basildiginda ara sonucu canli onizleme ile gosterme, ifade ve sonuc ayri goruntulenir (kaynak: codebase) [2026-03-27] [commit: acb3f69]
+- [x] useKeyboard hook testleri — Klavye kisayollarinin dogru calismasi icin unit testler, KEY_MAP ve ozel tuslar dahil (kaynak: codebase) [2026-03-27] [commit: 589e37d]
 - [x] Son sonucu kullanma (Ans) — Onceki hesap sonucunu yeni ifadede kullanmak icin Ans butonu ve degiskeni [2026-03-27] [commit: a042b45]
 - [x] Mutlak deger (abs) fonksiyonu — Bilimsel satirda |x| butonu, abs() parser destegi ile negatif sonuclari pozitife cevirme [2026-03-27] [commit: e28b9d3]
 - [x] Gecmisi temizle butonu — Hesap gecmisini tek tusla tamamen silme, localStorage dahil (kaynak: web) [2026-03-27] [commit: 26be85d]
