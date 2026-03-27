@@ -33,12 +33,17 @@ const SCIENTIFIC_ROWS: ButtonDef[][] = [
     { label: ')', value: ')', variant: 'scientific' },
   ],
   [
+    { label: 'sinh', value: 'sinh(', variant: 'scientific' },
+    { label: 'cosh', value: 'cosh(', variant: 'scientific' },
+    { label: 'tanh', value: 'tanh(', variant: 'scientific' },
     { label: 'nCr', value: 'nCr(', variant: 'scientific' },
     { label: 'nPr', value: 'nPr(', variant: 'scientific' },
+    { label: '!', value: '!', variant: 'scientific' },
+  ],
+  [
     { label: 'gcd', value: 'gcd(', variant: 'scientific' },
     { label: 'lcm', value: 'lcm(', variant: 'scientific' },
     { label: 'rand', value: 'rand', variant: 'scientific' },
-    { label: '!', value: '!', variant: 'scientific' },
   ],
 ]
 

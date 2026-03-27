@@ -5,6 +5,7 @@ import { normalizePowers } from './powerFunctions'
 import { normalizeInverseTrig, inverseTrigToDegrees } from './inverseTrig'
 import { normalizeCombinatorics } from './combinatorics'
 import { normalizeGcdLcm } from './gcdLcm'
+import { normalizeHyperbolicTrig } from './hyperbolicTrig'
 
 const math: MathJsStatic = create(all, {})
 
@@ -52,6 +53,7 @@ export function normalize(expression: string): string {
   expr = normalizePowers(expr)
   expr = normalizeCombinatorics(expr)
   expr = normalizeGcdLcm(expr)
+  expr = normalizeHyperbolicTrig(expr)
 
   const open = (expr.match(/\(/g) || []).length
   const close = (expr.match(/\)/g) || []).length
