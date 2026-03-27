@@ -6,21 +6,35 @@ Sesli komut destekli, tema secenekli bilimsel hesap makinesi.
 
 ## Ozellikler
 
-- **Bilimsel hesaplama** — sin, cos, tan, log, ln, karekok, us alma, pi
+- **Bilimsel hesaplama** — sin, cos, tan, asin, acos, atan, log, ln, karekok, kupkok, us alma, pi, e
+- **Faktoriyel** — `5!` seklinde faktoriyel hesaplama destegi
+- **Mutlak deger** — `|x|` pipe notasyonu ile abs hesaplama
+- **Kare/kup alma** — x², x³ butonlari ile hizli us alma
+- **Kok bulma** — √ ve ∛ butonlari, n'inci kok destegi
+- **Logaritma** — log10 ve ln fonksiyonlari
+- **Ters trigonometri** — asin, acos, atan butonlari (derece modunda otomatik donusum)
+- **Kombinatorik** — nCr (kombinasyon) ve nPr (permutasyon) fonksiyonlari
+- **OBEB/OKEK** — gcd ve lcm fonksiyonlari (Turkce: obeb/okek alias)
+- **Rastgele sayi** — rand butonu ile rastgele sayi uretme
+- **Euler sabiti** — ℯ butonu ile Euler sayisi
+- **Ans (Son sonuc)** — Onceki hesaplama sonucunu yeni ifadede kullanma
+- **Hafiza islemleri** — M+, M-, MR, MC butonlari
+- **Sayi formatlama** — Buyuk sonuclar locale-aware binlik ayirici ile gosterilir
+- **Sayi tabani donusumu** — Tam sayi sonuclari BIN/OCT/HEX olarak gosterilir
+- **Ifade dogrulama** — Yazarken canli uyarilar (eslesmemis parantez, ardisik operator)
+- **Panoya kopyalama** — Sonuca tiklayinca panoya kopyalar, gorsel geri bildirim
+- **Birim donusturucu** — Uzunluk, agirlik, sicaklik donusum utility'si
 - **Sesle hesaplama** — Turkce konusarak islem yaptirma ("bes carpi bes kac eder")
 - **Sonucu sesle okuma** — Sesle sorulan hesaplamalarin sonucu TTS ile okunur
 - **3 tema** — Ilkokul (renkli, eglenceli), Lise (modern, dengeli), Universite (koyu, profesyonel)
 - **Otomatik hesaplama** — 1.5 saniye bos kalinca sonuc otomatik hesaplanir
 - **Otomatik parantez kapatma** — `sin(90` veya `√(16` yazip esittire basinca parantez otomatik kapanir
 - **Klavye destegi** — Tum islemler klavyeden yapilabilir
-- **Gecmis paneli** — Son 20 hesaplama localStorage'da saklanir
+- **Gecmis paneli** — Son 20 hesaplama localStorage'da saklanir, arama destekli
 - **Gecmis navigasyonu** — Yukari/asagi ok tuslariyla onceki hesaplamalara gezinme
+- **Gecmis temizleme** — Tek tusla gecmisi sil (onay ile)
 - **Aci birimi** — DEG/RAD gecisi
-- **Sayi formatlama** — Buyuk sonuclar locale-aware binlik ayirici ile gosterilir
-- **Panoya kopyalama** — Sonuca tiklayinca panoya kopyalar, gorsel geri bildirim
-- **Faktoriyel** — `5!` seklinde faktoriyel hesaplama destegi
 - **Klavye kisayol haritasi** — Tum kisayollari gosteren acilir panel
-- **Hafiza islemleri** — M+, M-, MR, MC butonlari
 - **Silme butonu** — Dokunmatik kullanicilar icin ekranda ⌫ butonu
 
 ## Klavye Kisayollari
@@ -80,31 +94,48 @@ npm test
 ```
 src/
 ├── components/
-│   ├── BackspaceButton.tsx      # Ekranda silme butonu
-│   ├── Button.tsx               # Tek buton, variant bazli stil
-│   ├── ButtonGrid.tsx           # Bilimsel + ana buton gridi
-│   ├── Display.tsx              # Ifade + sonuc ekrani (kopyalama destekli)
-│   ├── History.tsx              # Gecmis paneli
-│   ├── KeyboardShortcutPanel.tsx # Klavye kisayol haritasi paneli
-│   ├── MemoryButtons.tsx        # M+, M-, MR, MC butonlari
-│   ├── MicButton.tsx            # Mikrofon butonu
-│   └── ThemeToggle.tsx          # Tema degistirme butonu
+│   ├── BackspaceButton.tsx        # Ekranda silme butonu
+│   ├── BaseConversionDisplay.tsx  # BIN/OCT/HEX sonuc gosterimi
+│   ├── Button.tsx                 # Tek buton, variant bazli stil
+│   ├── ButtonGrid.tsx             # 4 satir bilimsel + ana buton gridi
+│   ├── ClearHistoryButton.tsx     # Gecmis temizleme (onay ile)
+│   ├── Display.tsx                # Ifade + sonuc ekrani (kopyalama destekli)
+│   ├── History.tsx                # Gecmis paneli (arama destekli)
+│   ├── KeyboardShortcutPanel.tsx  # Klavye kisayol haritasi paneli
+│   ├── MemoryButtons.tsx          # M+, M-, MR, MC butonlari
+│   ├── MicButton.tsx              # Mikrofon butonu
+│   ├── ThemeToggle.tsx            # Tema degistirme butonu
+│   └── ValidationWarnings.tsx     # Canli ifade dogrulama uyarilari
 ├── hooks/
-│   ├── useCalculator.ts         # Hesaplama state yonetimi
-│   ├── useCopyToClipboard.ts    # Panoya kopyalama hook
-│   ├── useHistoryNavigation.ts  # Ok tuslariyla gecmis gezinme
-│   ├── useKeyboard.ts           # Klavye dinleyici
-│   ├── useMemory.ts             # Hafiza islemleri (M+/M-/MR/MC)
-│   ├── useSpeechRecognition.ts  # Web Speech API hook
-│   └── useTheme.ts              # Tema yonetimi
+│   ├── useCalculator.ts           # Hesaplama state yonetimi
+│   ├── useCopyToClipboard.ts      # Panoya kopyalama hook
+│   ├── useHistoryNavigation.ts    # Ok tuslariyla gecmis gezinme
+│   ├── useKeyboard.ts             # Klavye dinleyici
+│   ├── useMemory.ts               # Hafiza islemleri (M+/M-/MR/MC)
+│   ├── useSpeechRecognition.ts    # Web Speech API hook
+│   └── useTheme.ts                # Tema yonetimi
 ├── utils/
-│   ├── clipboard.ts             # Clipboard API wrapper
-│   ├── formatNumber.ts          # Locale-aware sayi formatlama
-│   ├── keyboardShortcuts.ts     # Kisayol verileri ve yardimcilar
-│   ├── parser.ts                # mathjs wrapper, normalizasyon, faktoriyel
-│   ├── speakResult.ts           # TTS ile sonuc okuma
-│   └── speechToMath.ts          # Turkce konusmayi matematik ifadesine cevirme
-├── App.tsx                      # Ana bilesen
-├── App.css                      # Global stiller
-└── theme.css                    # Tema CSS degiskenleri
+│   ├── ansStore.ts                # Ans (son sonuc) deposu
+│   ├── baseConverter.ts           # Sayi tabani donusumu (bin/oct/hex)
+│   ├── calcStats.ts               # Hesaplama istatistikleri
+│   ├── clipboard.ts               # Clipboard API wrapper
+│   ├── combinatorics.ts           # nCr/nPr kombinatorik fonksiyonlar
+│   ├── formatNumber.ts            # Locale-aware sayi formatlama
+│   ├── gcdLcm.ts                  # OBEB/OKEK (gcd/lcm) hesaplama
+│   ├── inverseTrig.ts             # Ters trigonometrik fonksiyonlar
+│   ├── keyboardShortcuts.ts       # Kisayol verileri ve yardimcilar
+│   ├── logarithm.ts               # log10/ln normalizasyon
+│   ├── parser.ts                  # mathjs wrapper, normalizasyon pipeline
+│   ├── percentPreview.ts          # Yuzde onizleme
+│   ├── powerFunctions.ts          # x²/x³ us alma
+│   ├── randomNumber.ts            # Rastgele sayi ureteci
+│   ├── rootFunctions.ts           # Kupkok, n'inci kok
+│   ├── searchHistory.ts           # Gecmis arama
+│   ├── speakResult.ts             # TTS ile sonuc okuma
+│   ├── speechToMath.ts            # Turkce konusmayi matematik ifadesine cevirme
+│   ├── unitConverter.ts           # Birim donusturucu
+│   └── validateExpression.ts      # Ifade dogrulama
+├── App.tsx                        # Ana bilesen
+├── App.css                        # Global stiller
+└── theme.css                      # Tema CSS degiskenleri
 ```
