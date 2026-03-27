@@ -44,6 +44,7 @@ const SCIENTIFIC_ROWS: ButtonDef[][] = [
     { label: 'gcd', value: 'gcd(', variant: 'scientific' },
     { label: 'lcm', value: 'lcm(', variant: 'scientific' },
     { label: 'rand', value: 'rand', variant: 'scientific' },
+    { label: 'prime?', value: 'isPrime(', variant: 'scientific' },
   ],
 ]
 

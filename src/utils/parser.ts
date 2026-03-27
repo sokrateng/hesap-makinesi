@@ -6,6 +6,7 @@ import { normalizeInverseTrig, inverseTrigToDegrees } from './inverseTrig'
 import { normalizeCombinatorics } from './combinatorics'
 import { normalizeGcdLcm } from './gcdLcm'
 import { normalizeHyperbolicTrig } from './hyperbolicTrig'
+import { normalizeIsPrime } from './isPrime'
 
 const math: MathJsStatic = create(all, {})
 
@@ -54,6 +55,7 @@ export function normalize(expression: string): string {
   expr = normalizeCombinatorics(expr)
   expr = normalizeGcdLcm(expr)
   expr = normalizeHyperbolicTrig(expr)
+  expr = normalizeIsPrime(expr)
 
   const open = (expr.match(/\(/g) || []).length
   const close = (expr.match(/\)/g) || []).length
