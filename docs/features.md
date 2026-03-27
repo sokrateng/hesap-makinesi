@@ -1,7 +1,6 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27]
 - [ ] Yuzde hesaplama gostergesi — Yuzde butonuna basildiginda ara sonucu canli onizleme ile gosterme, ifade ve sonuc ayri goruntulenir (kaynak: codebase) [2026-03-27]
 - [ ] useKeyboard hook testleri — Klavye kisayollarinin dogru calismasi icin unit testler, KEY_MAP ve ozel tuslar dahil (kaynak: codebase) [2026-03-27]
 - [ ] Sayi tabani donusumu (bin/oct/hex) — Hesap sonucunu ikilik, sekizlik ve onaltilik tabanlarda gosterme utility fonksiyonu (kaynak: web) [2026-03-27]
@@ -21,3 +20,4 @@
 - [x] Panoya kopyalama — Sonuca tiklayinca panoya kopyala, gorsel geri bildirim goster [2026-03-27] [commit: c0e20f8]
 - [x] Sayi formatlama — Buyuk sonuclari locale-aware binlik ayirici ile goster [2026-03-27] [commit: 3310be3]
 - [x] Hafiza (memory) islemleri — M+, M-, MR, MC ile sonucu hafizaya al/geri cagir (kaynak: web) [2026-03-27] [commit: 82dc37d]
+- [x] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27] [commit: 78193a6]
