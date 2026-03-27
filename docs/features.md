@@ -1,13 +1,13 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Son sonucu kullanma (Ans) — Onceki hesap sonucunu yeni ifadede kullanmak icin Ans butonu ve degiskeni (kaynak: web) [2026-03-27]
 - [ ] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27]
 - [ ] Yuzde hesaplama gostergesi — Yuzde butonuna basildiginda ara sonucu canli onizleme ile gosterme, ifade ve sonuc ayri goruntulenir (kaynak: codebase) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Son sonucu kullanma (Ans) — Onceki hesap sonucunu yeni ifadede kullanmak icin Ans butonu ve degiskeni [2026-03-27] [commit: a042b45]
 - [x] Mutlak deger (abs) fonksiyonu — Bilimsel satirda |x| butonu, abs() parser destegi ile negatif sonuclari pozitife cevirme [2026-03-27] [commit: e28b9d3]
 - [x] Gecmisi temizle butonu — Hesap gecmisini tek tusla tamamen silme, localStorage dahil (kaynak: web) [2026-03-27] [commit: 26be85d]
 - [x] Euler sabiti (e) destegi — Bilimsel satirda e sabiti butonu ekle, parser'da ℯ->e donusumu [2026-03-27] [commit: 951cd6e]
