@@ -1,8 +1,8 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Ters trigonometrik fonksiyonlar (asin/acos/atan) — arcsin, arccos, arctan fonksiyonlari icin parser normalizasyonu ve hesaplama destegi (kaynak: codebase) [2026-03-27]
-- [ ] Rastgele sayi ureteci (random) — Belirli aralikta rastgele tam sayi veya ondalikli sayi ureten utility fonksiyonu (kaynak: web) [2026-03-27]
+- [ ] Kombinatorik fonksiyonlar (nCr/nPr) — Kombinasyon ve permutasyon hesaplama utility fonksiyonu ve parser destegi (kaynak: codebase) [2026-03-27]
+- [ ] OBEB/OKEK hesaplama (gcd/lcm) — Iki veya daha fazla sayinin ortak bolen ve katini hesaplayan utility fonksiyonu (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
@@ -29,3 +29,5 @@
 - [x] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27] [commit: 78193a6]
 - [x] Hesaplama istatistikleri — Toplam hesaplama sayisi, en cok kullanilan operator ve ortalama sonuc gibi istatistikleri tutan utility fonksiyonu (kaynak: codebase) [2026-03-27] [commit: dc65ac6]
 - [x] Ifade gecmisi arama — Gecmis hesaplamalar arasinda metin bazli arama yapan utility fonksiyonu (kaynak: web) [2026-03-27] [commit: 643a0b4]
+- [x] Ters trigonometrik fonksiyonlar (asin/acos/atan) — arcsin, arccos, arctan fonksiyonlari icin parser normalizasyonu ve hesaplama destegi (kaynak: codebase) [2026-03-27] [commit: 0142841]
+- [x] Rastgele sayi ureteci (random) — Belirli aralikta rastgele tam sayi veya ondalikli sayi ureten utility fonksiyonu (kaynak: web) [2026-03-27] [commit: 48e960c]
