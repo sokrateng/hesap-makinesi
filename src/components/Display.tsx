@@ -1,3 +1,5 @@
+import { formatResult } from '../utils/formatNumber'
+
 interface DisplayProps {
   expression: string
   result: string
@@ -5,6 +7,7 @@ interface DisplayProps {
 }
 
 export function Display({ expression, result, error }: DisplayProps) {
+  const displayResult = result ? formatResult(result) : ''
   return (
     <div
       style={{
@@ -43,7 +46,7 @@ export function Display({ expression, result, error }: DisplayProps) {
           animation: error ? 'shake 300ms' : result ? 'fadeIn 200ms' : 'none',
         }}
       >
-        {error || result || '0'}
+        {error || displayResult || '0'}
       </div>
     </div>
   )
