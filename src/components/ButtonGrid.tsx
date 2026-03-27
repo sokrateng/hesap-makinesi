@@ -45,6 +45,12 @@ const SCIENTIFIC_ROWS: ButtonDef[][] = [
     { label: 'lcm', value: 'lcm(', variant: 'scientific' },
     { label: 'rand', value: 'rand', variant: 'scientific' },
     { label: 'prime?', value: 'isPrime(', variant: 'scientific' },
+    { label: 'mod', value: 'mod(', variant: 'scientific' },
+  ],
+  [
+    { label: 'round', value: 'round(', variant: 'scientific' },
+    { label: '⌈x⌉', value: 'ceil(', variant: 'scientific' },
+    { label: '⌊x⌋', value: 'floor(', variant: 'scientific' },
   ],
 ]
 

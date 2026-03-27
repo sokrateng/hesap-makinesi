@@ -7,6 +7,8 @@ import { normalizeCombinatorics } from './combinatorics'
 import { normalizeGcdLcm } from './gcdLcm'
 import { normalizeHyperbolicTrig } from './hyperbolicTrig'
 import { normalizeIsPrime } from './isPrime'
+import { normalizeModulo } from './modulo'
+import { normalizeRounding } from './rounding'
 
 const math: MathJsStatic = create(all, {})
 
@@ -56,6 +58,8 @@ export function normalize(expression: string): string {
   expr = normalizeGcdLcm(expr)
   expr = normalizeHyperbolicTrig(expr)
   expr = normalizeIsPrime(expr)
+  expr = normalizeModulo(expr)
+  expr = normalizeRounding(expr)
 
   const open = (expr.match(/\(/g) || []).length
   const close = (expr.match(/\)/g) || []).length
