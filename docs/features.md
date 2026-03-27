@@ -1,12 +1,14 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Logaritma destegi (log/ln) — log10 ve dogal logaritma (ln) fonksiyonlari icin parser normalizasyonu, log() ve ln() buton destegi (kaynak: codebase) [2026-03-27]
-- [ ] Kare ve kup alma (x^2/x^3) — Mevcut ifadeyi hizlica karesi ve kubu icin utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27]
+- [ ] Ters trigonometrik fonksiyonlar (asin/acos/atan) — arcsin, arccos, arctan fonksiyonlari icin parser normalizasyonu ve hesaplama destegi (kaynak: codebase) [2026-03-27]
+- [ ] Rastgele sayi ureteci (random) — Belirli aralikta rastgele tam sayi veya ondalikli sayi ureten utility fonksiyonu (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Logaritma destegi (log/ln) — log10 ve dogal logaritma (ln) fonksiyonlari icin parser normalizasyonu, log() ve ln() buton destegi (kaynak: codebase) [2026-03-27] [commit: 47cfeef]
+- [x] Kare ve kup alma (x^2/x^3) — Mevcut ifadeyi hizlica karesi ve kubu icin utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27] [commit: 9a42889]
 - [x] Birim donusturucu — Uzunluk, agirlik, sicaklik gibi temel birimleri donusturen utility fonksiyonu (kaynak: web) [2026-03-27] [commit: e12bbf9]
 - [x] Kok bulma (cbrt/nthroot) — Kupkok ve n'inci kok hesaplama destegi, parser'a cbrt() ve nthRoot() ekle (kaynak: codebase) [2026-03-27] [commit: 19bc31a]
 - [x] Sayi tabani donusumu (bin/oct/hex) — Hesap sonucunu ikilik, sekizlik ve onaltilik tabanlarda gosterme utility fonksiyonu (kaynak: web) [2026-03-27] [commit: fe679fd]
