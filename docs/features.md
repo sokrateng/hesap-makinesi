@@ -1,12 +1,14 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Hiperbolik fonksiyonlar (sinh/cosh/tanh) — Hiperbolik sinüs, kosinüs ve tanjant fonksiyonlari icin parser normalizasyonu ve hesaplama destegi (kaynak: codebase) [2026-03-27]
-- [ ] Asal sayi kontrolu (isPrime) — Bir sayinin asal olup olmadigini kontrol eden utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27]
+- [ ] Modulo operatoru (mod) — Mod islemi icin parser destegi ve buton, ornegin 5 mod 3 = 2 (kaynak: codebase) [2026-03-27]
+- [ ] Sayi yuvarlama (round/ceil/floor) — Yuvarlama fonksiyonlari icin parser normalizasyonu ve bilimsel butonlar (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Hiperbolik fonksiyonlar (sinh/cosh/tanh) — Hiperbolik sinüs, kosinüs ve tanjant fonksiyonlari icin parser normalizasyonu ve hesaplama destegi (kaynak: codebase) [2026-03-27] [commit: a6b6299]
+- [x] Asal sayi kontrolu (isPrime) — Bir sayinin asal olup olmadigini kontrol eden utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27] [commit: 33bd7af]
 - [x] Toplu UI entegrasyonu — asin/acos/atan, x²/x³, ∛, nCr/nPr, gcd/lcm, rand butonlari ButtonGrid'e eklendi; History bilesenine arama input'u eklendi [2026-03-27]
 - [x] Sayi tabani donusumu UI entegrasyonu — Hesap sonucu tam sayi oldugunda sonucun altinda BIN/OCT/HEX gosterimi (BaseConversionDisplay komponenti) [2026-03-27]
 - [x] Ifade dogrulama UI entegrasyonu — Kullanici ifade girerken eslesmemis parantez, ardisik operator gibi uyarilari canli gosterme (ValidationWarnings komponenti) [2026-03-27]
