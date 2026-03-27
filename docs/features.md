@@ -3,6 +3,9 @@
 ## Bekleyen
 - [ ] useTheme hook testleri — Tema degistirme hook'u icin unit testler, localStorage persistence dahil (kaynak: codebase) [2026-03-27]
 - [ ] Yuzde hesaplama gostergesi — Yuzde butonuna basildiginda ara sonucu canli onizleme ile gosterme, ifade ve sonuc ayri goruntulenir (kaynak: codebase) [2026-03-27]
+- [ ] useKeyboard hook testleri — Klavye kisayollarinin dogru calismasi icin unit testler, KEY_MAP ve ozel tuslar dahil (kaynak: codebase) [2026-03-27]
+- [ ] Sayi tabani donusumu (bin/oct/hex) — Hesap sonucunu ikilik, sekizlik ve onaltilik tabanlarda gosterme utility fonksiyonu (kaynak: web) [2026-03-27]
+- [ ] Ifade dogrulama — Girdinin gecerli matematiksel ifade olup olmadigini kontrol eden validate fonksiyonu, eslesmemis parantez ve ardisik operator tespiti (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
