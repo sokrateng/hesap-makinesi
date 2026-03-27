@@ -116,19 +116,37 @@ function App() {
           copyStatus={clipboard.status}
           onCopyResult={handleCopyResult}
         />
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '4px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '6px' }}>
+          <MemoryButtons
+            hasMemory={mem.hasMemory}
+            onMemoryAdd={handleMemoryAdd}
+            onMemorySubtract={handleMemorySubtract}
+            onMemoryRecall={handleMemoryRecall}
+            onMemoryClear={mem.memoryClear}
+          />
+          <button
+            className="btn-scientific"
+            onClick={() => calc.append('Ans')}
+            style={{
+              backgroundColor: 'var(--bg-scientific)',
+              color: 'var(--text-button)',
+              border: 'none',
+              borderRadius: 'var(--btn-radius)',
+              fontSize: 'var(--btn-sci-font-size)',
+              fontWeight: 500,
+              cursor: 'pointer',
+              padding: '10px 8px',
+              transition: 'filter 150ms, transform 100ms',
+              userSelect: 'none',
+            }}
+          >
+            Ans
+          </button>
           <BackspaceButton
             onClick={calc.deleteLast}
             disabled={!calc.expression}
           />
         </div>
-        <MemoryButtons
-          hasMemory={mem.hasMemory}
-          onMemoryAdd={handleMemoryAdd}
-          onMemorySubtract={handleMemorySubtract}
-          onMemoryRecall={handleMemoryRecall}
-          onMemoryClear={mem.memoryClear}
-        />
         <ButtonGrid
           onAppend={calc.append}
           onClear={calc.clear}

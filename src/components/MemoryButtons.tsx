@@ -33,14 +33,7 @@ export function MemoryButtons({
   onMemoryClear,
 }: MemoryButtonsProps) {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: '6px',
-        marginBottom: '6px',
-      }}
-    >
+    <>
       <button
         style={buttonStyle}
         onClick={onMemoryAdd}
@@ -85,6 +78,6 @@ export function MemoryButtons({
       >
         MC
       </button>
-    </div>
+    </>
   )
 }
