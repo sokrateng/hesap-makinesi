@@ -13,6 +13,7 @@ import { MemoryButtons } from './components/MemoryButtons'
 import { History } from './components/History'
 import { ThemeToggle } from './components/ThemeToggle'
 import { MicButton } from './components/MicButton'
+import { BackspaceButton } from './components/BackspaceButton'
 import './theme.css'
 import './App.css'
 
@@ -114,6 +115,12 @@ function App() {
           copyStatus={clipboard.status}
           onCopyResult={handleCopyResult}
         />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '4px' }}>
+          <BackspaceButton
+            onClick={calc.deleteLast}
+            disabled={!calc.expression}
+          />
+        </div>
         <MemoryButtons
           hasMemory={mem.hasMemory}
           onMemoryAdd={handleMemoryAdd}
