@@ -11,7 +11,7 @@ const SCIENTIFIC_ROW: ButtonDef[] = [
   { label: 'sin', value: 'sin(', variant: 'scientific' },
   { label: 'cos', value: 'cos(', variant: 'scientific' },
   { label: 'tan', value: 'tan(', variant: 'scientific' },
-  { label: 'log', value: 'log(', variant: 'scientific' },
+  { label: 'log', value: 'log10(', variant: 'scientific' },
   { label: 'ln', value: 'ln(', variant: 'scientific' },
   { label: '√', value: '√(', variant: 'scientific' },
   { label: '^', value: '^', variant: 'scientific' },

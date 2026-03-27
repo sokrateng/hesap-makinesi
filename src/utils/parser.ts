@@ -1,5 +1,7 @@
 import { create, all, type MathJsStatic } from 'mathjs'
 import { normalizeRoots } from './rootFunctions'
+import { normalizeLogarithms } from './logarithm'
+import { normalizePowers } from './powerFunctions'
 
 const math: MathJsStatic = create(all, {})
 
@@ -42,6 +44,8 @@ export function normalize(expression: string): string {
   expr = normalizeAbsoluteValue(expr)
   expr = normalizeFactorial(expr)
   expr = normalizeRoots(expr)
+  expr = normalizeLogarithms(expr)
+  expr = normalizePowers(expr)
 
   const open = (expr.match(/\(/g) || []).length
   const close = (expr.match(/\)/g) || []).length
