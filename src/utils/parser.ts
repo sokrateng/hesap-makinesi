@@ -4,12 +4,30 @@ const math: MathJsStatic = create(all, {})
 
 export type AngleMode = 'deg' | 'rad'
 
+export function normalizeFactorial(expr: string): string {
+  let result = expr
+
+  // Handle (...)! → factorial(...)
+  let prev = ''
+  while (prev !== result) {
+    prev = result
+    result = result.replace(/\(([^()]+)\)!/g, 'factorial($1)')
+  }
+
+  // Handle number! → factorial(number), e.g. 5! or 12!
+  result = result.replace(/(\d+)!/g, 'factorial($1)')
+
+  return result
+}
+
 export function normalize(expression: string): string {
   let expr = expression
     .replace(/×/g, '*')
     .replace(/÷/g, '/')
     .replace(/√\(/g, 'sqrt(')
     .replace(/π/g, 'pi')
+
+  expr = normalizeFactorial(expr)
 
   const open = (expr.match(/\(/g) || []).length
   const close = (expr.match(/\)/g) || []).length
