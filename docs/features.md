@@ -8,7 +8,7 @@
 ## Ertelenen
 
 ## Tamamlanan
-- [x] Gecmisi temizle butonu — Hesap gecmisini tek tusla tamamen silme, localStorage dahil (kaynak: web) [2026-03-27] [commit: PENDING]
+- [x] Gecmisi temizle butonu — Hesap gecmisini tek tusla tamamen silme, localStorage dahil (kaynak: web) [2026-03-27] [commit: 26be85d]
 - [x] Euler sabiti (e) destegi — Bilimsel satirda e sabiti butonu ekle, parser'da ℯ->e donusumu [2026-03-27] [commit: 951cd6e]
 - [x] Silme (backspace) butonu — UI uzerinde ⌫ butonu ile son karakteri silme, klavyesiz kullanim icin (kaynak: codebase) [2026-03-27] [commit: 4a02bf2]
 - [x] Ifade gecmisi navigasyonu — Yon tuslariyla (ArrowUp/Down) gecmis ifadeler arasinda gezinme (kaynak: codebase) [2026-03-27] [commit: 5b46667]
