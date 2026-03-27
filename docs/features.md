@@ -1,12 +1,14 @@
 # Feature Backlog
 
 ## Bekleyen
-- [ ] Birim donusturucu — Uzunluk, agirlik, sicaklik gibi temel birimleri donusturen utility fonksiyonu (kaynak: web) [2026-03-27]
-- [ ] Kok bulma (cbrt/nthroot) — Kupkok ve n'inci kok hesaplama destegi, parser'a cbrt() ve nthRoot() ekle (kaynak: codebase) [2026-03-27]
+- [ ] Logaritma destegi (log/ln) — log10 ve dogal logaritma (ln) fonksiyonlari icin parser normalizasyonu, log() ve ln() buton destegi (kaynak: codebase) [2026-03-27]
+- [ ] Kare ve kup alma (x^2/x^3) — Mevcut ifadeyi hizlica karesi ve kubu icin utility fonksiyonu ve parser destegi (kaynak: web) [2026-03-27]
 
 ## Ertelenen
 
 ## Tamamlanan
+- [x] Birim donusturucu — Uzunluk, agirlik, sicaklik gibi temel birimleri donusturen utility fonksiyonu (kaynak: web) [2026-03-27] [commit: e12bbf9]
+- [x] Kok bulma (cbrt/nthroot) — Kupkok ve n'inci kok hesaplama destegi, parser'a cbrt() ve nthRoot() ekle (kaynak: codebase) [2026-03-27] [commit: 19bc31a]
 - [x] Sayi tabani donusumu (bin/oct/hex) — Hesap sonucunu ikilik, sekizlik ve onaltilik tabanlarda gosterme utility fonksiyonu (kaynak: web) [2026-03-27] [commit: fe679fd]
 - [x] Ifade dogrulama — Girdinin gecerli matematiksel ifade olup olmadigini kontrol eden validate fonksiyonu, eslesmemis parantez ve ardisik operator tespiti (kaynak: web) [2026-03-27] [commit: 7090834]
 - [x] Yuzde hesaplama gostergesi — Yuzde butonuna basildiginda ara sonucu canli onizleme ile gosterme, ifade ve sonuc ayri goruntulenir (kaynak: codebase) [2026-03-27] [commit: acb3f69]
