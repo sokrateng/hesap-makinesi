@@ -213,6 +213,10 @@ function App() {
 
     const paramGuide = getParamGuide(value)
     if (paramGuide) {
+      if (calc.justCalculated) {
+        // Function after completed calculation = new calculation
+        calc.clear()
+      }
       setGuide(createGuideState(paramGuide))
       if (isMobile && !sciCollapsed) startSciAutoClose()
       return
@@ -220,7 +224,7 @@ function App() {
 
     if (isMobile && !sciCollapsed) startSciAutoClose()
     calc.append(value)
-  }, [guide, calc.append, handleGuideInput, finishGuide, isMobile, sciCollapsed, startSciAutoClose])
+  }, [guide, calc.append, calc.clear, calc.justCalculated, handleGuideInput, finishGuide, isMobile, sciCollapsed, startSciAutoClose])
 
   const handleClear = useCallback(() => {
     if (guide) {
