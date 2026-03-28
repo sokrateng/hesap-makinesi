@@ -384,8 +384,88 @@ function App() {
           </div>
         )}
         <ValidationWarnings expression={displayExpression} />
-        <div className={isLandscape ? 'landscape-wrapper' : ''}>
-          <div className={isLandscape ? 'landscape-left' : ''}>
+        {isLandscape ? (
+          <>
+            <div className="landscape-display-row">
+              <div
+                className="landscape-display"
+                ref={displayRef}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                <Display
+                  expression={displayExpression}
+                  result={calc.result}
+                  previousResult={calc.previousResult}
+                  error={calc.error}
+                  justCalculated={calc.justCalculated}
+                  copyStatus={clipboard.status}
+                  onCopyResult={handleCopyResult}
+                />
+              </div>
+            </div>
+            <div className="landscape-wrapper">
+              <div className="landscape-left">
+                <ButtonGrid
+                  onAppend={handleAppend}
+                  onClear={handleClear}
+                  onCalculate={handleCalculate}
+                  onPercent={calc.applyPercent}
+                  onNegate={calc.applyNegate}
+                  collapsed={false}
+                  isMobile={false}
+                  showScientificOnly
+                  compact
+                />
+                <div className="landscape-utility-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '3px' }}>
+                  <MemoryButtons
+                    hasMemory={mem.hasMemory}
+                    onMemoryAdd={handleMemoryAdd}
+                    onMemorySubtract={handleMemorySubtract}
+                    onMemoryRecall={handleMemoryRecall}
+                    onMemoryClear={mem.memoryClear}
+                  />
+                  <button
+                    className="btn-scientific calc-btn"
+                    onClick={() => handleAppend('Ans')}
+                    style={{
+                      backgroundColor: 'var(--bg-scientific)',
+                      color: 'var(--text-button)',
+                      border: 'none',
+                      borderRadius: 'var(--btn-radius)',
+                      fontSize: 'var(--btn-sci-font-size)',
+                      fontWeight: 500,
+                      cursor: 'pointer',
+                      padding: '6px 4px',
+                      transition: 'filter 150ms, transform 100ms',
+                      userSelect: 'none',
+                    }}
+                  >
+                    Ans
+                  </button>
+                  <BackspaceButton
+                    onClick={handleDeleteLast}
+                    disabled={!calc.expression && !guide}
+                  />
+                </div>
+              </div>
+              <div className="landscape-right">
+                <ButtonGrid
+                  onAppend={handleAppend}
+                  onClear={handleClear}
+                  onCalculate={handleCalculate}
+                  onPercent={calc.applyPercent}
+                  onNegate={calc.applyNegate}
+                  collapsed={true}
+                  isMobile={false}
+                  showMainOnly
+                  compact
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
             <div
               ref={displayRef}
               onTouchStart={handleTouchStart}
@@ -402,7 +482,7 @@ function App() {
               />
             </div>
             <BaseConversionDisplay result={calc.result} error={calc.error} />
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: isLandscape ? '3px' : '6px', marginBottom: isLandscape ? '3px' : '6px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '6px' }}>
               <MemoryButtons
                 hasMemory={mem.hasMemory}
                 onMemoryAdd={handleMemoryAdd}
@@ -433,32 +513,6 @@ function App() {
                 disabled={!calc.expression && !guide}
               />
             </div>
-            {isLandscape && (
-              <ButtonGrid
-                onAppend={handleAppend}
-                onClear={handleClear}
-                onCalculate={handleCalculate}
-                onPercent={calc.applyPercent}
-                onNegate={calc.applyNegate}
-                collapsed={false}
-                isMobile={false}
-              />
-            )}
-          </div>
-          {isLandscape ? (
-            <div className="landscape-right">
-              <ButtonGrid
-                onAppend={handleAppend}
-                onClear={handleClear}
-                onCalculate={handleCalculate}
-                onPercent={calc.applyPercent}
-                onNegate={calc.applyNegate}
-                collapsed={true}
-                isMobile={false}
-                showMainOnly
-              />
-            </div>
-          ) : (
             <ButtonGrid
               onAppend={handleAppend}
               onClear={handleClear}
@@ -469,8 +523,8 @@ function App() {
               onToggle={() => { clearSciAutoClose(); setSciCollapsed(prev => !prev) }}
               isMobile={isMobile}
             />
-          )}
-        </div>
+          </>
+        )}
         <History
           entries={calc.history}
           onLoad={calc.loadFromHistory}

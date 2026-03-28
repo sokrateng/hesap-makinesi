@@ -96,9 +96,11 @@ interface ButtonGridProps {
   onToggle?: () => void
   isMobile?: boolean
   showMainOnly?: boolean
+  showScientificOnly?: boolean
+  compact?: boolean
 }
 
-export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate, collapsed = false, onToggle, isMobile = false, showMainOnly = false }: ButtonGridProps) {
+export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate, collapsed = false, onToggle, isMobile = false, showMainOnly = false, showScientificOnly = false, compact = false }: ButtonGridProps) {
   const handleClick = (value: string) => {
     switch (value) {
       case 'clear': onClear(); break
@@ -115,13 +117,14 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
   }
 
   if (showMainOnly) {
+    const mainGap = compact ? '4px' : '8px'
     return (
       <div
         className="main-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '8px',
+          gap: mainGap,
         }}
       >
         {MAIN_GRID.map(btn => (
@@ -133,6 +136,32 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
           >
             {btn.label}
           </Button>
+        ))}
+      </div>
+    )
+  }
+
+  if (showScientificOnly) {
+    const sciGap = compact ? '3px' : '6px'
+    return (
+      <div className="scientific-only-grid">
+        {SCIENTIFIC_ROWS.map((row, rowIndex) => (
+          <div
+            key={rowIndex}
+            className="scientific-row"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: `repeat(${row.length}, 1fr)`,
+              gap: sciGap,
+              marginBottom: sciGap,
+            }}
+          >
+            {row.map(btn => (
+              <Button key={btn.label} variant={btn.variant} onClick={() => handleClick(btn.value)} tooltip={getTooltip(btn.value)}>
+                {btn.label}
+              </Button>
+            ))}
+          </div>
         ))}
       </div>
     )

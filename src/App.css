@@ -208,63 +208,126 @@ body {
 /* Mobile landscape layout */
 @media (max-height: 600px) and (orientation: landscape) {
   .calculator-app {
-    padding: 4px;
+    padding: 2px 4px;
     align-items: flex-start;
+    min-height: 100vh;
   }
 
   .calculator-container {
     max-width: 100%;
-    padding: 8px;
-    border-radius: 12px;
+    padding: 4px 6px;
+    border-radius: 8px;
   }
 
   .calculator-header {
-    margin-bottom: 4px;
+    margin-bottom: 2px;
   }
 
   .calculator-header h1 {
+    font-size: 11px;
+  }
+
+  .calculator-header .angle-toggle {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  .calculator-header .theme-toggle {
+    padding: 3px 6px;
+    font-size: 10px;
+  }
+
+  .calculator-header .mic-button {
+    padding: 3px 6px;
     font-size: 13px;
   }
 
+  /* Display row spans full width, compact height */
+  .landscape-display-row {
+    margin-bottom: 3px;
+  }
+
+  .landscape-display > div {
+    padding: 6px 12px !important;
+    min-height: 0 !important;
+    border-radius: 8px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Expression text */
+  .landscape-display > div > div:nth-child(1) {
+    font-size: 13px !important;
+    min-height: 16px !important;
+  }
+
+  /* Result text */
+  .landscape-display > div > div:nth-child(2) {
+    font-size: 22px !important;
+    margin-top: 2px !important;
+  }
+
+  /* Two column layout below display */
   .landscape-wrapper {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    grid-template-columns: 3fr 2fr;
+    gap: 4px;
+    align-items: start;
   }
 
   .landscape-left {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
+    overflow: hidden;
   }
 
   .landscape-right {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
+  }
+
+  .landscape-utility-row {
+    gap: 3px !important;
+  }
+
+  .landscape-utility-row button {
+    padding: 4px 2px !important;
+    font-size: 10px !important;
   }
 
   .scientific-row {
-    gap: 3px !important;
-    margin-bottom: 3px !important;
+    gap: 2px !important;
+    margin-bottom: 2px !important;
   }
 
   .main-grid {
-    gap: 4px !important;
+    gap: 3px !important;
   }
 
+  /* Compact button sizing for landscape */
   .calc-btn {
-    padding: 8px 4px !important;
-    font-size: 13px !important;
+    padding: 6px 3px !important;
+    font-size: 12px !important;
+  }
+
+  .landscape-left .calc-btn {
+    padding: 5px 2px !important;
+    font-size: 11px !important;
+  }
+
+  .landscape-right .calc-btn {
+    padding: 7px 4px !important;
+    font-size: 14px !important;
   }
 
   .sci-toggle-btn {
-    padding: 4px;
-    font-size: 11px;
-    margin-bottom: 4px;
+    padding: 3px;
+    font-size: 10px;
+    margin-bottom: 2px;
   }
 
   .quick-access-row {
-    gap: 3px !important;
+    gap: 2px !important;
   }
 }
