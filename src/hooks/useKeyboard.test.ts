@@ -28,10 +28,12 @@ describe('useKeyboard', () => {
 
   beforeEach(() => {
     actions = createActions()
+    vi.useFakeTimers()
   })
 
   afterEach(() => {
     vi.restoreAllMocks()
+    vi.useRealTimers()
   })
 
   describe('digit keys', () => {
@@ -126,58 +128,99 @@ describe('useKeyboard', () => {
       act(() => fireKey('%'))
       expect(actions.applyPercent).toHaveBeenCalledTimes(1)
     })
+
+    it('! appends !', () => {
+      renderHook(() => useKeyboard(actions))
+      act(() => fireKey('!'))
+      expect(actions.append).toHaveBeenCalledWith('!')
+    })
+
+    it('^ appends ^', () => {
+      renderHook(() => useKeyboard(actions))
+      act(() => fireKey('^'))
+      expect(actions.append).toHaveBeenCalledWith('^')
+    })
+
+    it(', appends comma', () => {
+      renderHook(() => useKeyboard(actions))
+      act(() => fireKey(','))
+      expect(actions.append).toHaveBeenCalledWith(',')
+    })
   })
 
-  describe('KEY_MAP function shortcuts', () => {
-    it('s appends sin(', () => {
+  describe('function name typing (buffer system)', () => {
+    it('typing "sin" appends sin(', () => {
       renderHook(() => useKeyboard(actions))
+
       act(() => fireKey('s'))
+      act(() => fireKey('i'))
+      act(() => fireKey('n'))
+
       expect(actions.append).toHaveBeenCalledWith('sin(')
     })
 
-    it('c appends cos(', () => {
+    it('typing "ln" appends ln(', () => {
       renderHook(() => useKeyboard(actions))
-      act(() => fireKey('c'))
-      expect(actions.append).toHaveBeenCalledWith('cos(')
-    })
 
-    it('t appends tan(', () => {
-      renderHook(() => useKeyboard(actions))
-      act(() => fireKey('t'))
-      expect(actions.append).toHaveBeenCalledWith('tan(')
-    })
-
-    it('n appends ln(', () => {
-      renderHook(() => useKeyboard(actions))
+      act(() => fireKey('l'))
       act(() => fireKey('n'))
+
       expect(actions.append).toHaveBeenCalledWith('ln(')
     })
 
-    it('g appends log(', () => {
+    it('typing "pi" appends π', () => {
       renderHook(() => useKeyboard(actions))
-      act(() => fireKey('g'))
-      expect(actions.append).toHaveBeenCalledWith('log(')
+
+      act(() => fireKey('p'))
+      act(() => fireKey('i'))
+
+      expect(actions.append).toHaveBeenCalledWith('π')
     })
 
-    it('r appends sqrt(', () => {
+    it('typing "gcd" appends gcd(', () => {
       renderHook(() => useKeyboard(actions))
-      act(() => fireKey('r'))
-      expect(actions.append).toHaveBeenCalledWith('sqrt(')
+
+      act(() => fireKey('g'))
+      act(() => fireKey('c'))
+      act(() => fireKey('d'))
+
+      expect(actions.append).toHaveBeenCalledWith('gcd(')
+    })
+
+    it('typing "lcm" appends lcm(', () => {
+      renderHook(() => useKeyboard(actions))
+
+      act(() => fireKey('l'))
+      act(() => fireKey('c'))
+      act(() => fireKey('m'))
+
+      expect(actions.append).toHaveBeenCalledWith('lcm(')
+    })
+
+    it('unmatched letters flush immediately as individual characters', () => {
+      renderHook(() => useKeyboard(actions))
+
+      act(() => fireKey('x'))
+
+      // x is not a prefix of any function name, so it flushes immediately
+      expect(actions.append).toHaveBeenCalledWith('x')
+    })
+
+    it('partial match flushes after timeout if no completion', () => {
+      renderHook(() => useKeyboard(actions))
+
+      act(() => fireKey('s'))
+      act(() => fireKey('q'))
+      // "sq" is prefix of "sqrt" so it waits
+
+      act(() => { vi.advanceTimersByTime(900) })
+
+      expect(actions.append).toHaveBeenCalledWith('s')
+      expect(actions.append).toHaveBeenCalledWith('q')
     })
   })
 
   describe('ignored keys', () => {
-    it('ignores unmapped letter keys', () => {
-      renderHook(() => useKeyboard(actions))
-      act(() => fireKey('a'))
-      act(() => fireKey('z'))
-      act(() => fireKey('x'))
-      expect(actions.append).not.toHaveBeenCalled()
-      expect(actions.calculate).not.toHaveBeenCalled()
-      expect(actions.clear).not.toHaveBeenCalled()
-      expect(actions.deleteLast).not.toHaveBeenCalled()
-    })
-
     it('ignores F-keys', () => {
       renderHook(() => useKeyboard(actions))
       act(() => fireKey('F1'))

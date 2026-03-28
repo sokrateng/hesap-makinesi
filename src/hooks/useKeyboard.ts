@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef, useCallback } from 'react'
 
 interface KeyboardActions {
   append: (value: string) => void
@@ -9,16 +9,68 @@ interface KeyboardActions {
   applyNegate: () => void
 }
 
-const KEY_MAP: Record<string, string> = {
-  s: 'sin(',
-  c: 'cos(',
-  t: 'tan(',
-  n: 'ln(',
-  g: 'log(',
-  r: 'sqrt(',
+const FUNCTION_NAMES: Record<string, string> = {
+  sin: 'sin(',
+  cos: 'cos(',
+  tan: 'tan(',
+  asin: 'arcsin(',
+  acos: 'arccos(',
+  atan: 'arctan(',
+  sinh: 'sinh(',
+  cosh: 'cosh(',
+  tanh: 'tanh(',
+  log: 'log10(',
+  ln: 'ln(',
+  sqrt: '√(',
+  cbrt: '∛(',
+  abs: 'abs(',
+  ncr: 'nCr(',
+  npr: 'nPr(',
+  gcd: 'gcd(',
+  lcm: 'lcm(',
+  obeb: 'gcd(',
+  okek: 'lcm(',
+  mod: 'mod(',
+  round: 'round(',
+  ceil: 'ceil(',
+  floor: 'floor(',
+  prime: 'isPrime(',
+  ans: 'Ans',
+  pi: 'π',
+  rand: 'rand',
 }
 
+const BUFFER_TIMEOUT_MS = 800
+
 export function useKeyboard(actions: KeyboardActions) {
+  const bufferRef = useRef('')
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const clearBuffer = useCallback(() => {
+    bufferRef.current = ''
+    if (timerRef.current) {
+      clearTimeout(timerRef.current)
+      timerRef.current = null
+    }
+  }, [])
+
+  const flushBuffer = useCallback(() => {
+    const buf = bufferRef.current
+    if (buf) {
+      for (const ch of buf) {
+        actions.append(ch)
+      }
+      bufferRef.current = ''
+    }
+  }, [actions])
+
+  const resetBufferTimer = useCallback(() => {
+    if (timerRef.current) clearTimeout(timerRef.current)
+    timerRef.current = setTimeout(() => {
+      flushBuffer()
+    }, BUFFER_TIMEOUT_MS)
+  }, [flushBuffer])
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
@@ -29,32 +81,105 @@ export function useKeyboard(actions: KeyboardActions) {
 
       if (/^[0-9.]$/.test(key)) {
         e.preventDefault()
+        flushBuffer()
         actions.append(key)
-      } else if (['+', '-', '*', '/'].includes(key)) {
+        return
+      }
+
+      if (['+', '-', '*', '/'].includes(key)) {
         e.preventDefault()
+        flushBuffer()
         actions.append(key)
-      } else if (['(', ')'].includes(key)) {
+        return
+      }
+
+      if (['(', ')'].includes(key)) {
         e.preventDefault()
+        flushBuffer()
         actions.append(key)
-      } else if (key === 'Enter' || key === '=') {
+        return
+      }
+
+      if (key === ',') {
         e.preventDefault()
+        flushBuffer()
+        actions.append(',')
+        return
+      }
+
+      if (key === 'Enter' || key === '=') {
+        e.preventDefault()
+        clearBuffer()
         actions.calculate()
-      } else if (key === 'Backspace') {
+        return
+      }
+
+      if (key === 'Backspace') {
         e.preventDefault()
-        actions.deleteLast()
-      } else if (key === 'Escape') {
+        if (bufferRef.current.length > 0) {
+          bufferRef.current = bufferRef.current.slice(0, -1)
+          if (bufferRef.current.length === 0) clearBuffer()
+          else resetBufferTimer()
+        } else {
+          actions.deleteLast()
+        }
+        return
+      }
+
+      if (key === 'Escape') {
         e.preventDefault()
+        clearBuffer()
         actions.clear()
-      } else if (key === '%') {
+        return
+      }
+
+      if (key === '%') {
         e.preventDefault()
+        flushBuffer()
         actions.applyPercent()
-      } else if (key in KEY_MAP) {
+        return
+      }
+
+      if (key === '!') {
         e.preventDefault()
-        actions.append(KEY_MAP[key])
+        flushBuffer()
+        actions.append('!')
+        return
+      }
+
+      if (key === '^') {
+        e.preventDefault()
+        flushBuffer()
+        actions.append('^')
+        return
+      }
+
+      if (/^[a-zA-Z]$/.test(key)) {
+        e.preventDefault()
+        const newBuffer = bufferRef.current + key.toLowerCase()
+        bufferRef.current = newBuffer
+
+        const exactMatch = FUNCTION_NAMES[newBuffer]
+        if (exactMatch) {
+          clearBuffer()
+          actions.append(exactMatch)
+          return
+        }
+
+        const hasPrefix = Object.keys(FUNCTION_NAMES).some(fn => fn.startsWith(newBuffer))
+        if (hasPrefix) {
+          resetBufferTimer()
+        } else {
+          flushBuffer()
+        }
+        return
       }
     }
 
     window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [actions])
+    return () => {
+      window.removeEventListener('keydown', handler)
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [actions, clearBuffer, flushBuffer, resetBufferTimer])
 }

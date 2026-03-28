@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useCalculator } from './hooks/useCalculator'
 import { useKeyboard } from './hooks/useKeyboard'
 import { useHistoryNavigation } from './hooks/useHistoryNavigation'
@@ -7,6 +7,7 @@ import { useSpeechRecognition } from './hooks/useSpeechRecognition'
 import { useCopyToClipboard } from './hooks/useCopyToClipboard'
 import { useMemory } from './hooks/useMemory'
 import { speechToMath } from './utils/speechToMath'
+import { getParamGuide, createGuideState, formatGuideExpression, formatGuideHint, type GuideState } from './utils/functionGuide'
 import { Display } from './components/Display'
 import { BaseConversionDisplay } from './components/BaseConversionDisplay'
 import { ValidationWarnings } from './components/ValidationWarnings'
@@ -25,6 +26,7 @@ function App() {
   const { theme, cycleTheme } = useTheme()
   const clipboard = useCopyToClipboard()
   const mem = useMemory()
+  const [guide, setGuide] = useState<GuideState | null>(null)
 
   const handleHistorySelect = useCallback((expr: string) => {
     calc.clear()
@@ -48,8 +50,14 @@ function App() {
 
   const handleMemoryRecall = useCallback(() => {
     const recalled = mem.memoryRecall()
-    if (recalled !== null) calc.append(String(recalled))
-  }, [mem.memoryRecall, calc.append])
+    if (recalled !== null) {
+      if (guide) {
+        handleGuideInput(String(recalled))
+      } else {
+        calc.append(String(recalled))
+      }
+    }
+  }, [mem.memoryRecall, calc.append, guide])
 
   const handleCopyResult = useCallback(() => {
     if (calc.result) {
@@ -73,16 +81,104 @@ function App() {
 
   const speech = useSpeechRecognition(handleSpeechResult)
 
+  const finishGuide = useCallback((state: GuideState) => {
+    const expr = `${state.funcName}(${state.values.join(',')})`
+    calc.append(expr)
+    setGuide(null)
+  }, [calc.append])
+
+  const handleGuideInput = useCallback((value: string) => {
+    if (!guide) return
+
+    setGuide(prev => {
+      if (!prev) return null
+      const updated = { ...prev, values: [...prev.values] }
+      updated.values[prev.currentParamIndex] = prev.values[prev.currentParamIndex] + value
+      return updated
+    })
+  }, [guide])
+
+  const handleAppend = useCallback((value: string) => {
+    if (guide) {
+      if (value === ',') {
+        setGuide(prev => {
+          if (!prev) return null
+          if (prev.values[prev.currentParamIndex].trim() === '') return prev
+          const nextIndex = prev.currentParamIndex + 1
+          if (nextIndex >= prev.params.length) {
+            finishGuide(prev)
+            return null
+          }
+          return { ...prev, currentParamIndex: nextIndex }
+        })
+        return
+      }
+
+      handleGuideInput(value)
+      return
+    }
+
+    const paramGuide = getParamGuide(value)
+    if (paramGuide) {
+      setGuide(createGuideState(paramGuide))
+      return
+    }
+
+    calc.append(value)
+  }, [guide, calc.append, handleGuideInput, finishGuide])
+
+  const handleClear = useCallback(() => {
+    if (guide) {
+      setGuide(null)
+      return
+    }
+    calc.clear()
+  }, [guide, calc.clear])
+
+  const handleDeleteLast = useCallback(() => {
+    if (guide) {
+      setGuide(prev => {
+        if (!prev) return null
+        const currentVal = prev.values[prev.currentParamIndex]
+        if (currentVal.length > 0) {
+          const updated = { ...prev, values: [...prev.values] }
+          updated.values[prev.currentParamIndex] = currentVal.slice(0, -1)
+          return updated
+        }
+        if (prev.currentParamIndex > 0) {
+          return { ...prev, currentParamIndex: prev.currentParamIndex - 1 }
+        }
+        return null
+      })
+      return
+    }
+    calc.deleteLast()
+  }, [guide, calc.deleteLast])
+
+  const handleCalculate = useCallback(() => {
+    if (guide) {
+      if (guide.values[guide.currentParamIndex].trim() !== '') {
+        finishGuide(guide)
+      }
+      return
+    }
+    calc.calculate()
+  }, [guide, calc.calculate, finishGuide])
+
   const keyboardActions = useMemo(() => ({
-    append: calc.append,
-    clear: calc.clear,
-    deleteLast: calc.deleteLast,
-    calculate: () => calc.calculate(),
+    append: handleAppend,
+    clear: handleClear,
+    deleteLast: handleDeleteLast,
+    calculate: handleCalculate,
     applyPercent: calc.applyPercent,
     applyNegate: calc.applyNegate,
-  }), [calc.append, calc.clear, calc.deleteLast, calc.calculate, calc.applyPercent, calc.applyNegate])
+  }), [handleAppend, handleClear, handleDeleteLast, handleCalculate, calc.applyPercent, calc.applyNegate])
 
   useKeyboard(keyboardActions)
+
+  const displayExpression = guide
+    ? calc.expression + formatGuideExpression(guide)
+    : calc.expression
 
   return (
     <div className="calculator-app">
@@ -111,9 +207,28 @@ function App() {
             {speech.error}
           </div>
         )}
-        <ValidationWarnings expression={calc.expression} />
+        {guide && (
+          <div style={{
+            backgroundColor: 'rgba(255, 169, 77, 0.12)',
+            border: '1px solid rgba(255, 169, 77, 0.3)',
+            borderRadius: '8px',
+            padding: '8px 12px',
+            marginBottom: '8px',
+            fontSize: '13px',
+            color: '#ffa94d',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+            <span>{formatGuideHint(guide)}</span>
+            <span style={{ fontSize: '11px', opacity: 0.7 }}>
+              virgul = sonraki | = = tamam | ESC = iptal
+            </span>
+          </div>
+        )}
+        <ValidationWarnings expression={displayExpression} />
         <Display
-          expression={calc.expression}
+          expression={displayExpression}
           result={calc.result}
           error={calc.error}
           copyStatus={clipboard.status}
@@ -130,7 +245,7 @@ function App() {
           />
           <button
             className="btn-scientific"
-            onClick={() => calc.append('Ans')}
+            onClick={() => handleAppend('Ans')}
             style={{
               backgroundColor: 'var(--bg-scientific)',
               color: 'var(--text-button)',
@@ -147,14 +262,14 @@ function App() {
             Ans
           </button>
           <BackspaceButton
-            onClick={calc.deleteLast}
-            disabled={!calc.expression}
+            onClick={handleDeleteLast}
+            disabled={!calc.expression && !guide}
           />
         </div>
         <ButtonGrid
-          onAppend={calc.append}
-          onClear={calc.clear}
-          onCalculate={() => calc.calculate()}
+          onAppend={handleAppend}
+          onClear={handleClear}
+          onCalculate={handleCalculate}
           onPercent={calc.applyPercent}
           onNegate={calc.applyNegate}
         />
