@@ -92,7 +92,7 @@ export function Display({ expression, result, previousResult, error, justCalcula
         } : undefined}
         title={canCopy ? 'Sonucu kopyala' : undefined}
         style={{
-          color: error ? 'var(--text-error)' : readyForNew ? 'var(--text-result)' : 'var(--text-result)',
+          color: error ? 'var(--text-error)' : 'var(--text-result)',
           fontSize: error ? '18px' : '36px',
           fontWeight: 700,
           textAlign: 'right',
