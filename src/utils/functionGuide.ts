@@ -45,14 +45,16 @@ export interface GuideState {
   params: readonly string[]
   currentParamIndex: number
   values: string[]
+  startedFresh: boolean
 }
 
-export function createGuideState(guide: ParamGuide): GuideState {
+export function createGuideState(guide: ParamGuide, startedFresh = false): GuideState {
   return {
     funcName: guide.funcName,
     params: guide.params,
     currentParamIndex: 0,
     values: guide.params.map(() => ''),
+    startedFresh,
   }
 }
 

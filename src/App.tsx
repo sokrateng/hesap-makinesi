@@ -145,9 +145,16 @@ function App() {
 
   const finishGuide = useCallback((state: GuideState) => {
     const expr = `${state.funcName}(${state.values.join(',')})`
-    calc.append(expr)
+    if (state.startedFresh) {
+      // Started after completed calculation — replace expression, don't append
+      calc.clear()
+      // Use setTimeout(0) to ensure clear() state is flushed before append
+      setTimeout(() => calc.append(expr), 0)
+    } else {
+      calc.append(expr)
+    }
     setGuide(null)
-  }, [calc.append])
+  }, [calc.append, calc.clear])
 
   // Auto-advance timer for guide mode: after 3s of non-empty param, advance to next
   useEffect(() => {
@@ -217,18 +224,16 @@ function App() {
 
     const paramGuide = getParamGuide(value)
     if (paramGuide) {
-      if (calc.justCalculated) {
-        // Function after completed calculation = new calculation
-        calc.clear()
-      }
-      setGuide(createGuideState(paramGuide))
+      // If there's a result showing (from manual = or auto-calc), this is a fresh start
+      const isFresh = calc.justCalculated || (!!calc.result && !calc.error)
+      setGuide(createGuideState(paramGuide, isFresh))
       if (isMobile && !sciCollapsed) startSciAutoClose()
       return
     }
 
     if (isMobile && !sciCollapsed) startSciAutoClose()
     calc.append(value)
-  }, [guide, calc.append, calc.clear, calc.justCalculated, handleGuideInput, finishGuide, isMobile, sciCollapsed, startSciAutoClose])
+  }, [guide, calc.append, calc.result, calc.error, calc.justCalculated, handleGuideInput, finishGuide, isMobile, sciCollapsed, startSciAutoClose])
 
   const handleClear = useCallback(() => {
     if (guide) {
