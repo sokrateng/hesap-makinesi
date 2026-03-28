@@ -34,6 +34,22 @@ function App() {
   const autoAdvanceIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const touchStartYRef = useRef<number | null>(null)
   const displayRef = useRef<HTMLDivElement>(null)
+  const sciAutoCloseRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const startSciAutoClose = useCallback(() => {
+    if (sciAutoCloseRef.current) clearTimeout(sciAutoCloseRef.current)
+    sciAutoCloseRef.current = setTimeout(() => {
+      setSciCollapsed(true)
+      sciAutoCloseRef.current = null
+    }, 4000)
+  }, [])
+
+  const clearSciAutoClose = useCallback(() => {
+    if (sciAutoCloseRef.current) {
+      clearTimeout(sciAutoCloseRef.current)
+      sciAutoCloseRef.current = null
+    }
+  }, [])
 
   useEffect(() => {
     const handler = () => setIsMobile(window.innerWidth < 768)
@@ -198,11 +214,13 @@ function App() {
     const paramGuide = getParamGuide(value)
     if (paramGuide) {
       setGuide(createGuideState(paramGuide))
+      if (isMobile && !sciCollapsed) startSciAutoClose()
       return
     }
 
+    if (isMobile && !sciCollapsed) startSciAutoClose()
     calc.append(value)
-  }, [guide, calc.append, handleGuideInput, finishGuide])
+  }, [guide, calc.append, handleGuideInput, finishGuide, isMobile, sciCollapsed, startSciAutoClose])
 
   const handleClear = useCallback(() => {
     if (guide) {
@@ -391,7 +409,7 @@ function App() {
           onPercent={calc.applyPercent}
           onNegate={calc.applyNegate}
           collapsed={sciCollapsed}
-          onToggle={() => setSciCollapsed(prev => !prev)}
+          onToggle={() => { clearSciAutoClose(); setSciCollapsed(prev => !prev) }}
           isMobile={isMobile}
         />
         <History
