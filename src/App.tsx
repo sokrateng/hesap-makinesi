@@ -100,12 +100,12 @@ function App() {
 
   const handleAppend = useCallback((value: string) => {
     if (guide) {
-      if (value === ',') {
+      if (value === ',' || value === ')') {
         setGuide(prev => {
           if (!prev) return null
           if (prev.values[prev.currentParamIndex].trim() === '') return prev
           const nextIndex = prev.currentParamIndex + 1
-          if (nextIndex >= prev.params.length) {
+          if (nextIndex >= prev.params.length || value === ')') {
             finishGuide(prev)
             return null
           }
@@ -222,7 +222,7 @@ function App() {
           }}>
             <span>{formatGuideHint(guide)}</span>
             <span style={{ fontSize: '11px', opacity: 0.7 }}>
-              virgul = sonraki | = = tamam | ESC = iptal
+              {guide.params.length > 1 ? ', = sonraki | ' : ''}= veya ) = tamam | ESC = iptal
             </span>
           </div>
         )}
