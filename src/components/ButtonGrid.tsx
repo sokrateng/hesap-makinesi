@@ -1,4 +1,5 @@
 import { Button, type ButtonVariant } from './Button'
+import { getTooltip } from '../utils/functionTooltips'
 
 interface ButtonDef {
   label: string
@@ -113,7 +114,7 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
           }}
         >
           {row.map(btn => (
-            <Button key={btn.label} variant={btn.variant} onClick={() => handleClick(btn.value)}>
+            <Button key={btn.label} variant={btn.variant} onClick={() => handleClick(btn.value)} tooltip={getTooltip(btn.value)}>
               {btn.label}
             </Button>
           ))}
