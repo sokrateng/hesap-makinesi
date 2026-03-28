@@ -367,7 +367,7 @@ function App() {
             result={calc.result}
             previousResult={calc.previousResult}
             error={calc.error}
-            readyForNew={calc.readyForNew}
+            justCalculated={calc.justCalculated}
             copyStatus={clipboard.status}
             onCopyResult={handleCopyResult}
           />

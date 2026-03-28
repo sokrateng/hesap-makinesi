@@ -6,7 +6,7 @@ interface DisplayProps {
   result: string
   previousResult?: string
   error: string | null
-  readyForNew?: boolean
+  justCalculated?: boolean
   copyStatus?: CopyStatus
   onCopyResult?: () => void
 }
@@ -17,7 +17,7 @@ const COPY_LABEL: Record<CopyStatus, string> = {
   failed: 'Kopyalanamadı',
 }
 
-export function Display({ expression, result, previousResult, error, readyForNew, copyStatus, onCopyResult }: DisplayProps) {
+export function Display({ expression, result, previousResult, error, justCalculated, copyStatus, onCopyResult }: DisplayProps) {
   const displayResult = result ? formatResult(result) : ''
   const displayPrevResult = previousResult ? formatResult(previousResult) : ''
   const canCopy = !!result && !error && !!onCopyResult
@@ -100,13 +100,13 @@ export function Display({ expression, result, previousResult, error, readyForNew
           marginTop: '8px',
           animation: error ? 'shake 300ms' : result ? 'fadeIn 200ms' : 'none',
           cursor: canCopy ? 'pointer' : 'default',
-          opacity: readyForNew ? 0.5 : 1,
+          opacity: 1,
           transition: 'opacity 500ms',
         }}
       >
         {error || displayResult || '0'}
       </div>
-      {readyForNew && !error && result && (
+      {justCalculated && !error && result && (
         <div
           style={{
             fontSize: '11px',
@@ -117,7 +117,7 @@ export function Display({ expression, result, previousResult, error, readyForNew
             width: '100%',
           }}
         >
-          yeni hesap icin yazmaya baslayin
+          rakam = yeni hesap | operator = devam
         </div>
       )}
     </div>
