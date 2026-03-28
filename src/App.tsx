@@ -365,7 +365,9 @@ function App() {
           <Display
             expression={displayExpression}
             result={calc.result}
+            previousResult={calc.previousResult}
             error={calc.error}
+            readyForNew={calc.readyForNew}
             copyStatus={clipboard.status}
             onCopyResult={handleCopyResult}
           />

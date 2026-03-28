@@ -4,7 +4,9 @@ import type { CopyStatus } from '../hooks/useCopyToClipboard'
 interface DisplayProps {
   expression: string
   result: string
+  previousResult?: string
   error: string | null
+  readyForNew?: boolean
   copyStatus?: CopyStatus
   onCopyResult?: () => void
 }
@@ -15,8 +17,9 @@ const COPY_LABEL: Record<CopyStatus, string> = {
   failed: 'Kopyalanamadı',
 }
 
-export function Display({ expression, result, error, copyStatus, onCopyResult }: DisplayProps) {
+export function Display({ expression, result, previousResult, error, readyForNew, copyStatus, onCopyResult }: DisplayProps) {
   const displayResult = result ? formatResult(result) : ''
+  const displayPrevResult = previousResult ? formatResult(previousResult) : ''
   const canCopy = !!result && !error && !!onCopyResult
 
   return (
@@ -51,6 +54,20 @@ export function Display({ expression, result, error, copyStatus, onCopyResult }:
           {COPY_LABEL[copyStatus]}
         </div>
       )}
+      {displayPrevResult && (
+        <div
+          style={{
+            color: 'var(--text-expression)',
+            fontSize: '13px',
+            opacity: 0.4,
+            textAlign: 'right',
+            width: '100%',
+            marginBottom: '4px',
+          }}
+        >
+          onceki = {displayPrevResult}
+        </div>
+      )}
       <div
         style={{
           color: 'var(--text-expression)',
@@ -75,7 +92,7 @@ export function Display({ expression, result, error, copyStatus, onCopyResult }:
         } : undefined}
         title={canCopy ? 'Sonucu kopyala' : undefined}
         style={{
-          color: error ? 'var(--text-error)' : 'var(--text-result)',
+          color: error ? 'var(--text-error)' : readyForNew ? 'var(--text-result)' : 'var(--text-result)',
           fontSize: error ? '18px' : '36px',
           fontWeight: 700,
           textAlign: 'right',
@@ -83,10 +100,26 @@ export function Display({ expression, result, error, copyStatus, onCopyResult }:
           marginTop: '8px',
           animation: error ? 'shake 300ms' : result ? 'fadeIn 200ms' : 'none',
           cursor: canCopy ? 'pointer' : 'default',
+          opacity: readyForNew ? 0.5 : 1,
+          transition: 'opacity 500ms',
         }}
       >
         {error || displayResult || '0'}
       </div>
+      {readyForNew && !error && result && (
+        <div
+          style={{
+            fontSize: '11px',
+            color: 'var(--text-expression)',
+            opacity: 0.4,
+            marginTop: '4px',
+            textAlign: 'right',
+            width: '100%',
+          }}
+        >
+          yeni hesap icin yazmaya baslayin
+        </div>
+      )}
     </div>
   )
 }

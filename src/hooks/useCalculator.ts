@@ -16,6 +16,7 @@ export interface CalculateOptions {
 const HISTORY_KEY = 'hesap-makinesi-history'
 const MAX_HISTORY = 20
 const AUTO_CALC_DELAY = 1500
+const NEW_CALC_IDLE_DELAY = 6000
 
 function loadHistory(): HistoryEntry[] {
   try {
@@ -33,10 +34,13 @@ function saveHistory(history: HistoryEntry[]) {
 export function useCalculator() {
   const [expression, setExpression] = useState('')
   const [result, setResult] = useState('')
+  const [previousResult, setPreviousResult] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [history, setHistory] = useState<HistoryEntry[]>(loadHistory)
   const [angleMode, setAngleMode] = useState<AngleMode>('deg')
+  const [readyForNew, setReadyForNew] = useState(false)
   const autoCalcTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const idleTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const expressionRef = useRef(expression)
 
   useEffect(() => {
@@ -50,6 +54,21 @@ export function useCalculator() {
     }
   }, [])
 
+  const clearIdleTimer = useCallback(() => {
+    if (idleTimer.current) {
+      clearTimeout(idleTimer.current)
+      idleTimer.current = null
+    }
+  }, [])
+
+  const startIdleTimer = useCallback(() => {
+    clearIdleTimer()
+    idleTimer.current = setTimeout(() => {
+      setReadyForNew(true)
+      idleTimer.current = null
+    }, NEW_CALC_IDLE_DELAY)
+  }, [clearIdleTimer])
+
   const doCalculate = useCallback((expr: string, mode: AngleMode, speak: boolean) => {
     if (!expr.trim()) return
 
@@ -62,8 +81,10 @@ export function useCalculator() {
     }
 
     setResult(calcResult!)
+    setPreviousResult('')
     setError(null)
     setAns(calcResult!)
+    setReadyForNew(false)
 
     if (speak) {
       speakResult(expr, calcResult!)
@@ -80,7 +101,9 @@ export function useCalculator() {
       saveHistory(updated)
       return updated
     })
-  }, [])
+
+    startIdleTimer()
+  }, [startIdleTimer])
 
   const calculate = useCallback((options?: CalculateOptions) => {
     clearAutoCalcTimer()
@@ -109,21 +132,37 @@ export function useCalculator() {
         saveHistory(updated)
         return updated
       })
+      startIdleTimer()
     }, AUTO_CALC_DELAY)
-  }, [clearAutoCalcTimer])
+  }, [clearAutoCalcTimer, startIdleTimer])
+
+  const beginNewCalcIfNeeded = useCallback(() => {
+    if (readyForNew && result) {
+      setPreviousResult(result)
+      setExpression('')
+      setResult('')
+      setError(null)
+      setReadyForNew(false)
+      clearIdleTimer()
+    }
+  }, [readyForNew, result, clearIdleTimer])
 
   const append = useCallback((value: string) => {
+    beginNewCalcIfNeeded()
     setExpression(prev => prev + value)
     setError(null)
     startAutoCalcTimer()
-  }, [startAutoCalcTimer])
+  }, [startAutoCalcTimer, beginNewCalcIfNeeded])
 
   const clear = useCallback(() => {
     clearAutoCalcTimer()
+    clearIdleTimer()
     setExpression('')
     setResult('')
+    setPreviousResult('')
     setError(null)
-  }, [clearAutoCalcTimer])
+    setReadyForNew(false)
+  }, [clearAutoCalcTimer, clearIdleTimer])
 
   const deleteLast = useCallback(() => {
     setExpression(prev => prev.slice(0, -1))
@@ -132,12 +171,15 @@ export function useCalculator() {
 
   const loadFromHistory = useCallback((index: number) => {
     clearAutoCalcTimer()
+    clearIdleTimer()
     if (index >= 0 && index < history.length) {
       setExpression(history[index].expression)
       setResult('')
+      setPreviousResult('')
       setError(null)
+      setReadyForNew(false)
     }
-  }, [history, clearAutoCalcTimer])
+  }, [history, clearAutoCalcTimer, clearIdleTimer])
 
   const clearHistory = useCallback(() => {
     setHistory([])
@@ -153,29 +195,36 @@ export function useCalculator() {
   }, [])
 
   const applyPercent = useCallback(() => {
+    beginNewCalcIfNeeded()
     setExpression(prev => `${prev} / 100`)
     startAutoCalcTimer()
-  }, [startAutoCalcTimer])
+  }, [startAutoCalcTimer, beginNewCalcIfNeeded])
 
   const applyNegate = useCallback(() => {
+    beginNewCalcIfNeeded()
     setExpression(prev => `-(${prev})`)
     startAutoCalcTimer()
-  }, [startAutoCalcTimer])
+  }, [startAutoCalcTimer, beginNewCalcIfNeeded])
 
   const appendAndCalculate = useCallback((value: string, options?: CalculateOptions) => {
     clearAutoCalcTimer()
+    clearIdleTimer()
     const newExpr = expressionRef.current + value
     setExpression(newExpr)
     setError(null)
+    setReadyForNew(false)
     doCalculate(newExpr, angleMode, options?.speak ?? false)
-  }, [angleMode, doCalculate, clearAutoCalcTimer])
+  }, [angleMode, doCalculate, clearAutoCalcTimer, clearIdleTimer])
 
   useEffect(() => {
-    return () => clearAutoCalcTimer()
-  }, [clearAutoCalcTimer])
+    return () => {
+      clearAutoCalcTimer()
+      clearIdleTimer()
+    }
+  }, [clearAutoCalcTimer, clearIdleTimer])
 
   return {
-    expression, result, error, history, angleMode,
+    expression, result, previousResult, error, history, angleMode, readyForNew,
     append, clear, clearHistory, deleteLast, calculate, appendAndCalculate, loadFromHistory,
     toggleAngleMode, applyPercent, applyNegate,
   }
