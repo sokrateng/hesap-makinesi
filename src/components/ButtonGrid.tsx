@@ -55,6 +55,15 @@ const SCIENTIFIC_ROWS: ButtonDef[][] = [
   ],
 ]
 
+const QUICK_ACCESS: ButtonDef[] = [
+  { label: 'sin', value: 'sin(', variant: 'scientific' },
+  { label: 'cos', value: 'cos(', variant: 'scientific' },
+  { label: '√', value: '√(', variant: 'scientific' },
+  { label: '^', value: '^', variant: 'scientific' },
+  { label: '(', value: '(', variant: 'scientific' },
+  { label: ')', value: ')', variant: 'scientific' },
+]
+
 const MAIN_GRID: ButtonDef[] = [
   { label: 'C', value: 'clear', variant: 'action' },
   { label: '±', value: 'negate', variant: 'operator' },
@@ -83,9 +92,12 @@ interface ButtonGridProps {
   onCalculate: () => void
   onPercent: () => void
   onNegate: () => void
+  collapsed?: boolean
+  onToggle?: () => void
+  isMobile?: boolean
 }
 
-export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate }: ButtonGridProps) {
+export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate, collapsed = false, onToggle, isMobile = false }: ButtonGridProps) {
   const handleClick = (value: string) => {
     switch (value) {
       case 'clear': onClear(); break
@@ -101,11 +113,43 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
     }
   }
 
+  const showToggle = isMobile && onToggle
+  const showScientific = !isMobile || !collapsed
+  const showQuickAccess = isMobile && collapsed
+
   return (
     <div>
-      {SCIENTIFIC_ROWS.map((row, rowIndex) => (
+      {showToggle && (
+        <button
+          className="sci-toggle-btn"
+          onClick={onToggle}
+          type="button"
+        >
+          <span>{collapsed ? '⚡ Bilimsel' : '⚡ Gizle'}</span>
+          <span style={{ fontSize: '10px', opacity: 0.7 }}>{collapsed ? '▼' : '▲'}</span>
+        </button>
+      )}
+      {showQuickAccess && (
+        <div
+          className="quick-access-row"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(6, 1fr)',
+            gap: '5px',
+            marginBottom: '6px',
+          }}
+        >
+          {QUICK_ACCESS.map(btn => (
+            <Button key={`qa-${btn.label}`} variant={btn.variant} onClick={() => handleClick(btn.value)} tooltip={getTooltip(btn.value)}>
+              {btn.label}
+            </Button>
+          ))}
+        </div>
+      )}
+      {showScientific && SCIENTIFIC_ROWS.map((row, rowIndex) => (
         <div
           key={rowIndex}
+          className="scientific-row"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(6, 1fr)',
@@ -121,6 +165,7 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
         </div>
       ))}
       <div
+        className="main-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',

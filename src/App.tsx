@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useCalculator } from './hooks/useCalculator'
 import { useKeyboard } from './hooks/useKeyboard'
 import { useHistoryNavigation } from './hooks/useHistoryNavigation'
@@ -27,6 +27,48 @@ function App() {
   const clipboard = useCopyToClipboard()
   const mem = useMemory()
   const [guide, setGuide] = useState<GuideState | null>(null)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
+  const [sciCollapsed, setSciCollapsed] = useState(true)
+  const [autoAdvanceRemaining, setAutoAdvanceRemaining] = useState<number | null>(null)
+  const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const autoAdvanceIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const touchStartYRef = useRef<number | null>(null)
+  const displayRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+
+  const clearAutoAdvanceTimers = useCallback(() => {
+    if (autoAdvanceTimerRef.current) {
+      clearTimeout(autoAdvanceTimerRef.current)
+      autoAdvanceTimerRef.current = null
+    }
+    if (autoAdvanceIntervalRef.current) {
+      clearInterval(autoAdvanceIntervalRef.current)
+      autoAdvanceIntervalRef.current = null
+    }
+    setAutoAdvanceRemaining(null)
+  }, [])
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if (!isMobile) return
+    touchStartYRef.current = e.touches[0].clientY
+  }, [isMobile])
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (!isMobile || touchStartYRef.current === null) return
+    const deltaY = e.changedTouches[0].clientY - touchStartYRef.current
+    touchStartYRef.current = null
+    if (Math.abs(deltaY) < 50) return
+    if (deltaY > 0) {
+      setSciCollapsed(false)
+    } else {
+      setSciCollapsed(true)
+    }
+  }, [isMobile])
 
   const handleHistorySelect = useCallback((expr: string) => {
     calc.clear()
@@ -87,6 +129,40 @@ function App() {
     setGuide(null)
   }, [calc.append])
 
+  // Auto-advance timer for guide mode: after 3s of non-empty param, advance to next
+  useEffect(() => {
+    clearAutoAdvanceTimers()
+
+    if (!guide) return
+    const currentVal = guide.values[guide.currentParamIndex]
+    if (currentVal.trim() === '') return
+
+    setAutoAdvanceRemaining(3)
+    autoAdvanceIntervalRef.current = setInterval(() => {
+      setAutoAdvanceRemaining(prev => (prev !== null && prev > 1 ? prev - 1 : prev))
+    }, 1000)
+
+    autoAdvanceTimerRef.current = setTimeout(() => {
+      setGuide(prev => {
+        if (!prev) return null
+        if (prev.values[prev.currentParamIndex].trim() === '') return prev
+        const nextIndex = prev.currentParamIndex + 1
+        if (nextIndex >= prev.params.length) {
+          finishGuide(prev)
+          return null
+        }
+        return { ...prev, currentParamIndex: nextIndex }
+      })
+      setAutoAdvanceRemaining(null)
+      if (autoAdvanceIntervalRef.current) {
+        clearInterval(autoAdvanceIntervalRef.current)
+        autoAdvanceIntervalRef.current = null
+      }
+    }, 3000)
+
+    return () => clearAutoAdvanceTimers()
+  }, [guide?.currentParamIndex, guide?.values[guide?.currentParamIndex ?? 0], finishGuide, clearAutoAdvanceTimers])
+
   const handleGuideInput = useCallback((value: string) => {
     if (!guide) return
 
@@ -101,6 +177,7 @@ function App() {
   const handleAppend = useCallback((value: string) => {
     if (guide) {
       if (value === ',' || value === ')') {
+        clearAutoAdvanceTimers()
         setGuide(prev => {
           if (!prev) return null
           if (prev.values[prev.currentParamIndex].trim() === '') return prev
@@ -129,11 +206,12 @@ function App() {
 
   const handleClear = useCallback(() => {
     if (guide) {
+      clearAutoAdvanceTimers()
       setGuide(null)
       return
     }
     calc.clear()
-  }, [guide, calc.clear])
+  }, [guide, calc.clear, clearAutoAdvanceTimers])
 
   const handleDeleteLast = useCallback(() => {
     if (guide) {
@@ -157,13 +235,14 @@ function App() {
 
   const handleCalculate = useCallback(() => {
     if (guide) {
+      clearAutoAdvanceTimers()
       if (guide.values[guide.currentParamIndex].trim() !== '') {
         finishGuide(guide)
       }
       return
     }
     calc.calculate()
-  }, [guide, calc.calculate, finishGuide])
+  }, [guide, calc.calculate, finishGuide, clearAutoAdvanceTimers])
 
   const keyboardActions = useMemo(() => ({
     append: handleAppend,
@@ -219,21 +298,60 @@ function App() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: '8px',
           }}>
             <span>{formatGuideHint(guide)}</span>
-            <span style={{ fontSize: '11px', opacity: 0.7 }}>
-              {guide.params.length > 1 ? ', = sonraki | ' : ''}= veya ) = tamam | ESC = iptal
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              {autoAdvanceRemaining !== null && (
+                <span className="auto-advance-indicator" style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '11px',
+                  color: '#ffa94d',
+                  opacity: 0.9,
+                }}>
+                  <span style={{
+                    display: 'inline-block',
+                    width: '24px',
+                    height: '4px',
+                    backgroundColor: 'rgba(255, 169, 77, 0.25)',
+                    borderRadius: '2px',
+                    overflow: 'hidden',
+                    position: 'relative',
+                  }}>
+                    <span style={{
+                      display: 'block',
+                      height: '100%',
+                      width: `${(autoAdvanceRemaining / 3) * 100}%`,
+                      backgroundColor: '#ffa94d',
+                      borderRadius: '2px',
+                      transition: 'width 0.3s',
+                    }} />
+                  </span>
+                  {autoAdvanceRemaining}s
+                </span>
+              )}
+              <span style={{ fontSize: '11px', opacity: 0.7 }}>
+                {guide.params.length > 1 ? ', = sonraki | ' : ''}= veya ) = tamam | ESC = iptal
+              </span>
             </span>
           </div>
         )}
         <ValidationWarnings expression={displayExpression} />
-        <Display
-          expression={displayExpression}
-          result={calc.result}
-          error={calc.error}
-          copyStatus={clipboard.status}
-          onCopyResult={handleCopyResult}
-        />
+        <div
+          ref={displayRef}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <Display
+            expression={displayExpression}
+            result={calc.result}
+            error={calc.error}
+            copyStatus={clipboard.status}
+            onCopyResult={handleCopyResult}
+          />
+        </div>
         <BaseConversionDisplay result={calc.result} error={calc.error} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '6px' }}>
           <MemoryButtons
@@ -272,6 +390,9 @@ function App() {
           onCalculate={handleCalculate}
           onPercent={calc.applyPercent}
           onNegate={calc.applyNegate}
+          collapsed={sciCollapsed}
+          onToggle={() => setSciCollapsed(prev => !prev)}
+          isMobile={isMobile}
         />
         <History
           entries={calc.history}

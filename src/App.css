@@ -138,3 +138,69 @@ body {
   25% { transform: translateX(-4px); }
   75% { transform: translateX(4px); }
 }
+
+/* Scientific panel toggle button */
+.sci-toggle-btn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  margin-bottom: 6px;
+  background: var(--bg-scientific, rgba(100, 100, 140, 0.25));
+  color: var(--text-button, #e0e0e0);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--btn-radius, 12px);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 150ms, transform 100ms;
+  user-select: none;
+}
+
+.sci-toggle-btn:hover {
+  filter: brightness(1.2);
+}
+
+.sci-toggle-btn:active {
+  transform: scale(0.97);
+}
+
+/* Mobile compact layout */
+@media (max-width: 767px) {
+  .calculator-app {
+    padding: 8px;
+  }
+
+  .calculator-container {
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .calculator-header {
+    margin-bottom: 10px;
+  }
+
+  .calculator-header h1 {
+    font-size: 15px;
+  }
+
+  .scientific-row {
+    gap: 4px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .main-grid {
+    gap: 5px !important;
+  }
+
+  .quick-access-row {
+    gap: 4px !important;
+  }
+
+  .calc-btn {
+    padding: 10px !important;
+    font-size: 14px !important;
+  }
+}

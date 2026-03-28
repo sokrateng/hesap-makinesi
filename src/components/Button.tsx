@@ -47,6 +47,7 @@ export function Button({ children, onClick, variant = 'number', wide = false, to
     <div style={{ position: 'relative' }}>
       <button
         ref={btnRef}
+        className="calc-btn"
         onClick={onClick}
         style={{
           backgroundColor: VARIANT_CSS_VAR[variant],
