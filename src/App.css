@@ -206,7 +206,7 @@ body {
 }
 
 /* Mobile landscape layout */
-@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+@media (max-height: 600px) and (orientation: landscape) {
   .calculator-app {
     padding: 4px;
     align-items: flex-start;

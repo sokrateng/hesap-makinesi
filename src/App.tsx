@@ -27,8 +27,15 @@ function App() {
   const clipboard = useCopyToClipboard()
   const mem = useMemory()
   const [guide, setGuide] = useState<GuideState | null>(null)
-  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
-  const [isLandscape, setIsLandscape] = useState(typeof window !== 'undefined' ? window.innerWidth > window.innerHeight && window.innerHeight < 500 : false)
+  const detectMobile = () => typeof window !== 'undefined' && window.innerWidth < 768
+  const detectLandscape = () => {
+    if (typeof window === 'undefined') return false
+    const w = window.innerWidth
+    const h = window.innerHeight
+    return w > h && h < 600
+  }
+  const [isMobile, setIsMobile] = useState(detectMobile)
+  const [isLandscape, setIsLandscape] = useState(detectLandscape)
   const [sciCollapsed, setSciCollapsed] = useState(true)
   const [autoAdvanceRemaining, setAutoAdvanceRemaining] = useState<number | null>(null)
   const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -54,11 +61,21 @@ function App() {
 
   useEffect(() => {
     const handler = () => {
-      setIsMobile(window.innerWidth < 768)
-      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 500)
+      // Delay to let browser finish rotation layout
+      setTimeout(() => {
+        setIsMobile(detectMobile())
+        setIsLandscape(detectLandscape())
+      }, 100)
     }
     window.addEventListener('resize', handler)
-    return () => window.removeEventListener('resize', handler)
+    window.addEventListener('orientationchange', handler)
+    // Also listen to screen.orientation if available
+    screen.orientation?.addEventListener('change', handler)
+    return () => {
+      window.removeEventListener('resize', handler)
+      window.removeEventListener('orientationchange', handler)
+      screen.orientation?.removeEventListener('change', handler)
+    }
   }, [])
 
   const clearAutoAdvanceTimers = useCallback(() => {
@@ -146,15 +163,12 @@ function App() {
   const finishGuide = useCallback((state: GuideState) => {
     const expr = `${state.funcName}(${state.values.join(',')})`
     if (state.startedFresh) {
-      // Started after completed calculation — replace expression, don't append
-      calc.clear()
-      // Use setTimeout(0) to ensure clear() state is flushed before append
-      setTimeout(() => calc.append(expr), 0)
+      calc.startNewWith(expr)
     } else {
       calc.append(expr)
     }
     setGuide(null)
-  }, [calc.append, calc.clear])
+  }, [calc.append, calc.startNewWith])
 
   // Auto-advance timer for guide mode: after 3s of non-empty param, advance to next
   useEffect(() => {

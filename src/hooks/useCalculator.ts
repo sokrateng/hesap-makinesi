@@ -216,6 +216,16 @@ export function useCalculator() {
     startAutoCalcTimer()
   }, [startAutoCalcTimer, justCalculated, result])
 
+  const startNewWith = useCallback((expr: string) => {
+    clearAutoCalcTimer()
+    setPreviousResult(result)
+    setExpression(expr)
+    setResult('')
+    setError(null)
+    setJustCalculated(false)
+    startAutoCalcTimer()
+  }, [result, clearAutoCalcTimer, startAutoCalcTimer])
+
   const appendAndCalculate = useCallback((value: string, options?: CalculateOptions) => {
     clearAutoCalcTimer()
     const newExpr = expressionRef.current + value
@@ -230,7 +240,7 @@ export function useCalculator() {
 
   return {
     expression, result, previousResult, error, history, angleMode, justCalculated,
-    append, clear, clearHistory, deleteLast, calculate, appendAndCalculate, loadFromHistory,
+    append, clear, clearHistory, deleteLast, calculate, appendAndCalculate, startNewWith, loadFromHistory,
     toggleAngleMode, applyPercent, applyNegate,
   }
 }
