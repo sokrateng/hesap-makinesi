@@ -95,9 +95,10 @@ interface ButtonGridProps {
   collapsed?: boolean
   onToggle?: () => void
   isMobile?: boolean
+  showMainOnly?: boolean
 }
 
-export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate, collapsed = false, onToggle, isMobile = false }: ButtonGridProps) {
+export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate, collapsed = false, onToggle, isMobile = false, showMainOnly = false }: ButtonGridProps) {
   const handleClick = (value: string) => {
     switch (value) {
       case 'clear': onClear(); break
@@ -111,6 +112,30 @@ export function ButtonGrid({ onAppend, onClear, onCalculate, onPercent, onNegate
       }
       default: onAppend(value)
     }
+  }
+
+  if (showMainOnly) {
+    return (
+      <div
+        className="main-grid"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '8px',
+        }}
+      >
+        {MAIN_GRID.map(btn => (
+          <Button
+            key={btn.label}
+            variant={btn.variant}
+            wide={btn.wide}
+            onClick={() => handleClick(btn.value)}
+          >
+            {btn.label}
+          </Button>
+        ))}
+      </div>
+    )
   }
 
   const showToggle = isMobile && onToggle

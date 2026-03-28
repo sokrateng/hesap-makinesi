@@ -28,6 +28,7 @@ function App() {
   const mem = useMemory()
   const [guide, setGuide] = useState<GuideState | null>(null)
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth < 768 : false)
+  const [isLandscape, setIsLandscape] = useState(typeof window !== 'undefined' ? window.innerWidth > window.innerHeight && window.innerHeight < 500 : false)
   const [sciCollapsed, setSciCollapsed] = useState(true)
   const [autoAdvanceRemaining, setAutoAdvanceRemaining] = useState<number | null>(null)
   const autoAdvanceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -52,7 +53,10 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const handler = () => setIsMobile(window.innerWidth < 768)
+    const handler = () => {
+      setIsMobile(window.innerWidth < 768)
+      setIsLandscape(window.innerWidth > window.innerHeight && window.innerHeight < 500)
+    }
     window.addEventListener('resize', handler)
     return () => window.removeEventListener('resize', handler)
   }, [])
@@ -361,63 +365,93 @@ function App() {
           </div>
         )}
         <ValidationWarnings expression={displayExpression} />
-        <div
-          ref={displayRef}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <Display
-            expression={displayExpression}
-            result={calc.result}
-            previousResult={calc.previousResult}
-            error={calc.error}
-            justCalculated={calc.justCalculated}
-            copyStatus={clipboard.status}
-            onCopyResult={handleCopyResult}
-          />
+        <div className={isLandscape ? 'landscape-wrapper' : ''}>
+          <div className={isLandscape ? 'landscape-left' : ''}>
+            <div
+              ref={displayRef}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+            >
+              <Display
+                expression={displayExpression}
+                result={calc.result}
+                previousResult={calc.previousResult}
+                error={calc.error}
+                justCalculated={calc.justCalculated}
+                copyStatus={clipboard.status}
+                onCopyResult={handleCopyResult}
+              />
+            </div>
+            <BaseConversionDisplay result={calc.result} error={calc.error} />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: isLandscape ? '3px' : '6px', marginBottom: isLandscape ? '3px' : '6px' }}>
+              <MemoryButtons
+                hasMemory={mem.hasMemory}
+                onMemoryAdd={handleMemoryAdd}
+                onMemorySubtract={handleMemorySubtract}
+                onMemoryRecall={handleMemoryRecall}
+                onMemoryClear={mem.memoryClear}
+              />
+              <button
+                className="btn-scientific calc-btn"
+                onClick={() => handleAppend('Ans')}
+                style={{
+                  backgroundColor: 'var(--bg-scientific)',
+                  color: 'var(--text-button)',
+                  border: 'none',
+                  borderRadius: 'var(--btn-radius)',
+                  fontSize: 'var(--btn-sci-font-size)',
+                  fontWeight: 500,
+                  cursor: 'pointer',
+                  padding: '10px 8px',
+                  transition: 'filter 150ms, transform 100ms',
+                  userSelect: 'none',
+                }}
+              >
+                Ans
+              </button>
+              <BackspaceButton
+                onClick={handleDeleteLast}
+                disabled={!calc.expression && !guide}
+              />
+            </div>
+            {isLandscape && (
+              <ButtonGrid
+                onAppend={handleAppend}
+                onClear={handleClear}
+                onCalculate={handleCalculate}
+                onPercent={calc.applyPercent}
+                onNegate={calc.applyNegate}
+                collapsed={false}
+                isMobile={false}
+              />
+            )}
+          </div>
+          {isLandscape ? (
+            <div className="landscape-right">
+              <ButtonGrid
+                onAppend={handleAppend}
+                onClear={handleClear}
+                onCalculate={handleCalculate}
+                onPercent={calc.applyPercent}
+                onNegate={calc.applyNegate}
+                collapsed={true}
+                isMobile={false}
+                showMainOnly
+              />
+            </div>
+          ) : (
+            <ButtonGrid
+              onAppend={handleAppend}
+              onClear={handleClear}
+              onCalculate={handleCalculate}
+              onPercent={calc.applyPercent}
+              onNegate={calc.applyNegate}
+              collapsed={sciCollapsed}
+              onToggle={() => { clearSciAutoClose(); setSciCollapsed(prev => !prev) }}
+              isMobile={isMobile}
+            />
+          )}
         </div>
-        <BaseConversionDisplay result={calc.result} error={calc.error} />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '6px', marginBottom: '6px' }}>
-          <MemoryButtons
-            hasMemory={mem.hasMemory}
-            onMemoryAdd={handleMemoryAdd}
-            onMemorySubtract={handleMemorySubtract}
-            onMemoryRecall={handleMemoryRecall}
-            onMemoryClear={mem.memoryClear}
-          />
-          <button
-            className="btn-scientific"
-            onClick={() => handleAppend('Ans')}
-            style={{
-              backgroundColor: 'var(--bg-scientific)',
-              color: 'var(--text-button)',
-              border: 'none',
-              borderRadius: 'var(--btn-radius)',
-              fontSize: 'var(--btn-sci-font-size)',
-              fontWeight: 500,
-              cursor: 'pointer',
-              padding: '10px 8px',
-              transition: 'filter 150ms, transform 100ms',
-              userSelect: 'none',
-            }}
-          >
-            Ans
-          </button>
-          <BackspaceButton
-            onClick={handleDeleteLast}
-            disabled={!calc.expression && !guide}
-          />
-        </div>
-        <ButtonGrid
-          onAppend={handleAppend}
-          onClear={handleClear}
-          onCalculate={handleCalculate}
-          onPercent={calc.applyPercent}
-          onNegate={calc.applyNegate}
-          collapsed={sciCollapsed}
-          onToggle={() => { clearSciAutoClose(); setSciCollapsed(prev => !prev) }}
-          isMobile={isMobile}
-        />
         <History
           entries={calc.history}
           onLoad={calc.loadFromHistory}
